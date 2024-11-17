@@ -53,6 +53,7 @@
     display: flex;
     align-items: center;
     border-radius: 5px;
+    padding: .25rem;
 }
 
 .sidebar .bottom-section .more-btn:hover {

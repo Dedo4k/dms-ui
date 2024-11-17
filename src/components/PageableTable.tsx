@@ -1,9 +1,7 @@
 import React, {FC, ReactNode, useEffect, useState} from "react";
 import '../styles/PageableTable.css';
-import {Page} from "../types/types";
-import {useDispatch} from "react-redux";
-import {setPageNumber, setPageSize} from "../store/DatasetSlice";
 import {ChevronLeft, ChevronRight, FirstPageRounded, LastPageRounded} from "@mui/icons-material";
+import {Pagination} from "../hooks/PaginationHook";
 
 export interface Column {
   header: string
@@ -14,15 +12,13 @@ export interface Column {
 interface PageableTableProps {
   data: any[]
   columns: Column[]
-  page: Page
-  fetch: () => void
+  page: Pagination
   onRowClick?: (row: any, rowIndex: number) => void
   onRowDoubleClick?: (row: any, rowIndex: number) => void
 }
 
 const PageableTable: FC<PageableTableProps> = (props: PageableTableProps) => {
-  const dispatch = useDispatch();
-  const {columns, data, page, fetch, onRowClick, onRowDoubleClick} = props;
+  const {columns, data, page, onRowClick, onRowDoubleClick} = props;
   const [size, setSize] = useState(page.size);
 
   useEffect(() => {
@@ -30,23 +26,19 @@ const PageableTable: FC<PageableTableProps> = (props: PageableTableProps) => {
   }, [page.size]);
 
   const handleNextPage = () => {
-    dispatch(setPageNumber(page.number + 1))
-    fetch()
+    page.setNumber(page.number + 1)
   }
 
   const handlePrevPage = () => {
-    dispatch(setPageNumber(page.number - 1))
-    fetch()
+    page.setNumber(page.number - 1)
   }
 
   const handleFirstPage = () => {
-    dispatch(setPageNumber(0))
-    fetch()
+    page.setNumber(0)
   }
 
   const handleLastPage = () => {
-    dispatch(setPageNumber(page.totalPages - 1))
-    fetch()
+    page.setNumber(page.totalPages - 1)
   }
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,14 +50,13 @@ const PageableTable: FC<PageableTableProps> = (props: PageableTableProps) => {
   const applySizeChange = (event: React.FocusEvent<HTMLInputElement>) => {
     let value = Number.parseInt(event.currentTarget.value);
 
-    if (value < 1) {
+    if (!value || value < 1) {
       value = 1
     }
 
     setSize(value)
-    dispatch(setPageSize(value))
-
-    fetch()
+    page.setSize(value)
+    page.setNumber(0)
   }
 
   return <>

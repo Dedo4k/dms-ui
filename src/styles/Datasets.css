@@ -9,8 +9,24 @@
     width: 90%;
 }
 
+.datasets .table-container .action-cell {
+    display: flex;
+    flex-direction: row;
+    gap: .25rem;
+    align-items: center;
+    justify-content: flex-start;
+}
+
 .datasets .table-container .action-cell a {
-    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    padding: .25rem;
+}
+
+.datasets .table-container .action-cell a:hover {
+    background-color: #e0e0e0;
 }
 
 .datasets .table-container .action-cell a svg {

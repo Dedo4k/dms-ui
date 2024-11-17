@@ -1,40 +1,39 @@
 import {Dataset} from "../models/Dataset";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Page} from "../types/types";
+import {DataGroup} from "../models/DataGroup";
 
 export interface DatasetsState {
   datasets: Dataset[]
-  page: Page
 }
 
 const initialState: DatasetsState = {
-  datasets: [],
-  page: {
-    number: 0,
-    totalPages: 0,
-    size: 0,
-    totalElements: 0
-  }
+  datasets: []
 }
 
 export const datasetsSlice = createSlice({
   name: 'datasets',
   initialState,
   reducers: {
-    addDatasets: (state: DatasetsState, action: PayloadAction<{ datasets: Dataset[], page: Page }>) => {
-      state.datasets = action.payload.datasets
-      state.page = action.payload.page
+    addDatasets: (state: DatasetsState, action: PayloadAction<Dataset[]>) => {
+      state.datasets = action.payload
     },
-    setPageSize: (state: DatasetsState, action: PayloadAction<number>) => {
-      state.page.size = action.payload
-      state.page.number = 0
+    addDataset: (state: DatasetsState, action: PayloadAction<Dataset>) => {
+      let dataset = state.datasets.find(dataset => dataset.id === action.payload.id)
+      if (!dataset) {
+        state.datasets.push(action.payload)
+      } else {
+        dataset = action.payload
+      }
     },
-    setPageNumber: (state: DatasetsState, action: PayloadAction<number>) => {
-      state.page.number = action.payload
-    },
+    addGroups: (state: DatasetsState, action: PayloadAction<{datasetId: number, groups: DataGroup[]}>) => {
+      let dataset = state.datasets.find(dataset => dataset.id === action.payload.datasetId)
+      if (dataset) {
+        dataset.groups = action.payload.groups
+      }
+    }
   }
 })
 
-export const {addDatasets, setPageSize, setPageNumber} = datasetsSlice.actions
+export const {addDatasets, addDataset, addGroups} = datasetsSlice.actions
 
 export default datasetsSlice.reducer
