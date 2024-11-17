@@ -1,0 +1,23 @@
+.dataset-editor {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.dataset-editor .groups {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #ddd;
+}
+
+.dataset-editor .annotations {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #ddd;
+}
+
+.dataset-editor .editor {
+    flex: 1;
+}

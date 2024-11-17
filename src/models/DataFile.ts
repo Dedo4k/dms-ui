@@ -4,4 +4,5 @@ export interface DataFile {
   fileName: string
   creationDate: string
   modificationDate: string
+  _links: any
 }

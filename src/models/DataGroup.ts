@@ -4,4 +4,5 @@ export interface DataGroup {
   id: number
   name: string
   files: DataFile[]
+  _links: any
 }

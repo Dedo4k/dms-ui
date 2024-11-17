@@ -1,19 +1,19 @@
 import {FC, useEffect} from "react";
 import "../styles/Datasets.css";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "../store/Store";
-import {getDatasets} from "../services/DatasetApi";
-import {addDatasets} from "../store/DatasetSlice";
 import PageableTable, {Column} from "../components/PageableTable";
 import {Link, useNavigate} from "react-router-dom";
 import {Dataset} from "../models/Dataset";
-import {Download, InfoRounded} from "@mui/icons-material";
+import {Download, InfoRounded, PlayArrow} from "@mui/icons-material";
+import {fetchDatasets} from "../services/DatasetService";
+import {downloadDataset} from "../services/DatasetApi";
+import {usePagination} from "../hooks/PaginationHook";
 
 export const Datasets: FC = () => {
-  const dispatch = useDispatch();
   const datasets = useSelector((state: RootState) => state.datasetsState.datasets);
-  const page = useSelector((state: RootState) => state.datasetsState.page);
-  const navigate = useNavigate();
+  const pagination = usePagination({size: 5})
+  const navigate = useNavigate()
 
   const columns: Column[] = [
     {header: "ID", accessor: "id"},
@@ -30,14 +30,8 @@ export const Datasets: FC = () => {
   ];
 
   useEffect(() => {
-    fetchDatasets()
-  }, [])
-
-  const fetchDatasets = async () => {
-    const apiResponse = await getDatasets();
-
-    dispatch(addDatasets(apiResponse.data))
-  }
+    fetchDatasets(pagination)
+  }, [pagination.number, pagination.size])
 
   const handleRowDoubleClick = (row: Dataset, rowIndex: number) => {
     navigate(row.id.toString())
@@ -46,10 +40,15 @@ export const Datasets: FC = () => {
   const rowActionsRenderer = (value: any, row: Dataset, rowIndex: number) => {
     return <>
       <div className={"action-cell"}>
-        <Link to={row._links?.download?.href} title={"Download"} target={"_blank"}>
-          <Download/>
+        <Link to={`/editor/${row.id}`} title={"Go to editor"}>
+          <PlayArrow fontSize={"medium"}/>
         </Link>
-        <Link to={row.id.toString()}><InfoRounded/></Link>
+        <div title={"Download"} onClick={() => downloadDataset(row.id)}>
+          <Download fontSize={"medium"}/>
+        </div>
+        <Link to={row.id.toString()}>
+          <InfoRounded fontSize={"medium"}/>
+        </Link>
       </div>
     </>
   }
@@ -57,7 +56,7 @@ export const Datasets: FC = () => {
   return <>
     <div className={"datasets"}>
       <div className={"table-container"}>
-        <PageableTable data={datasets} columns={columns} page={page} fetch={fetchDatasets}
+        <PageableTable data={datasets} columns={columns} page={pagination}
                        onRowDoubleClick={handleRowDoubleClick}/>
       </div>
     </div>
