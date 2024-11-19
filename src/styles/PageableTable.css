@@ -1,99 +1,114 @@
+/*
+ * Copyright (c) 2024 Uladzislau Lailo.
+ *
+ * All rights reserved.
+ *
+ * This source code, and any associated documentation, is the intellectual property of Uladzislau Lailo.
+ * Unauthorized copying, modification, distribution, or any form of reuse of this code, in whole or in part,
+ * without explicit permission from the copyright holder is strictly prohibited, except where explicitly permitted
+ * under applicable open-source licenses (if any).
+ *
+ * Licensed use:
+ * If the code is provided under an open-source license, you must follow the terms of that license, which can be found in the LICENSE file.
+ * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
+ */
+
 .pageable-table-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
-    min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  min-width: 400px;
 }
 
 .pageable-header {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .size-controls {
-    display: flex;
-    flex-direction: row;
-    padding: .5rem;
-    gap: .25rem;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  padding: .5rem;
+  gap: .25rem;
+  align-items: center;
 }
 
 .size-controls .page-size {
-    width: 40px;
+  width: 40px;
 }
 
 .size-controls input::-webkit-outer-spin-button,
 .size-controls input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }
 
 .size-controls input {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 5px;
-    font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
 }
 
 .pageable-controls {
-    display: flex;
-    flex-direction: row;
-    gap: .25rem;
-    align-items: center;
-    padding: .5rem;
-    height: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: .25rem;
+  align-items: center;
+  padding: .5rem;
+  height: 2rem;
 }
 
 .pageable-controls .page-btn {
-    border: 1px solid transparent;
-    background-color: transparent;
-    border-radius: 20%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  border: 1px solid transparent;
+  background-color: transparent;
+  border-radius: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pageable-controls .page-btn:hover:not(:disabled) {
-    background-color: #dcdcdc;
+  background-color: #dcdcdc;
 }
 
 .pageable-table,
 .pageable-table table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow: auto;
+  width: 100%;
+  border-collapse: collapse;
+  overflow: auto;
 }
 
 .pageable-table tr th {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
 
 .pageable-table tr,
 .pageable-table td,
-.pageable-table th{
-    border: 1px solid #ddd;
-    height: 2rem;
-    white-space: nowrap;
+.pageable-table th {
+  border: 1px solid #ddd;
+  height: 2rem;
+  white-space: nowrap;
 }
 
-.pageable-table tr:hover{
-    background-color: #f1f1f1;
-    cursor: pointer;
+.pageable-table tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
 }
 
 .pageable-footer {
-    width: 100%;
-    height: 2rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .showing-entries {
-    padding: .5rem;
+  padding: .5rem;
 }

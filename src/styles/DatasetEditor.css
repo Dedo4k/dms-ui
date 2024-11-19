@@ -1,23 +1,48 @@
+/*
+ * Copyright (c) 2024 Uladzislau Lailo.
+ *
+ * All rights reserved.
+ *
+ * This source code, and any associated documentation, is the intellectual property of Uladzislau Lailo.
+ * Unauthorized copying, modification, distribution, or any form of reuse of this code, in whole or in part,
+ * without explicit permission from the copyright holder is strictly prohibited, except where explicitly permitted
+ * under applicable open-source licenses (if any).
+ *
+ * Licensed use:
+ * If the code is provided under an open-source license, you must follow the terms of that license, which can be found in the LICENSE file.
+ * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
+ */
+
 .dataset-editor {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
 }
 
 .dataset-editor .groups {
-    width: 250px;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #ddd;
+  /*width: 250px;*/
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #ddd;
+  overflow: auto;
 }
 
 .dataset-editor .annotations {
-    width: 250px;
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid #ddd;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #ddd;
 }
 
 .dataset-editor .editor {
-    flex: 1;
+  flex: 1;
+  overflow: auto;
+}
+
+.dataset-editor .groups .groups-list {
+  overflow: auto;
+}
+
+.dataset-editor .groups .groups-list {
+  overflow: auto;
 }

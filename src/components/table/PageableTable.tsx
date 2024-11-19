@@ -1,7 +1,22 @@
-import React, {FC, ReactNode, useEffect, useState} from "react";
-import '../styles/PageableTable.css';
-import {ChevronLeft, ChevronRight, FirstPageRounded, LastPageRounded} from "@mui/icons-material";
-import {Pagination} from "../hooks/PaginationHook";
+/*
+ * Copyright (c) 2024 Uladzislau Lailo.
+ *
+ * All rights reserved.
+ *
+ * This source code, and any associated documentation, is the intellectual property of Uladzislau Lailo.
+ * Unauthorized copying, modification, distribution, or any form of reuse of this code, in whole or in part,
+ * without explicit permission from the copyright holder is strictly prohibited, except where explicitly permitted
+ * under applicable open-source licenses (if any).
+ *
+ * Licensed use:
+ * If the code is provided under an open-source license, you must follow the terms of that license, which can be found in the LICENSE file.
+ * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
+ */
+
+import { ChevronLeft, ChevronRight, FirstPageRounded, LastPageRounded } from "@mui/icons-material"
+import React, { FC, ReactNode, useEffect, useState } from "react"
+import "../../styles/PageableTable.css"
+import { Pagination } from "../../hooks/PaginationHook"
 
 export interface Column {
   header: string
@@ -18,12 +33,18 @@ interface PageableTableProps {
 }
 
 const PageableTable: FC<PageableTableProps> = (props: PageableTableProps) => {
-  const {columns, data, page, onRowClick, onRowDoubleClick} = props;
-  const [size, setSize] = useState(page.size);
+  const {
+    columns,
+    data,
+    page,
+    onRowClick,
+    onRowDoubleClick
+  } = props
+  const [size, setSize] = useState(page.size)
 
   useEffect(() => {
     setSize(page.size)
-  }, [page.size]);
+  }, [page.size])
 
   const handleNextPage = () => {
     page.setNumber(page.number + 1)
@@ -42,13 +63,13 @@ const PageableTable: FC<PageableTableProps> = (props: PageableTableProps) => {
   }
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value = Number.parseInt(event.currentTarget.value);
+    let value = Number.parseInt(event.currentTarget.value)
 
     setSize(value)
   }
 
   const applySizeChange = (event: React.FocusEvent<HTMLInputElement>) => {
-    let value = Number.parseInt(event.currentTarget.value);
+    let value = Number.parseInt(event.currentTarget.value)
 
     if (!value || value < 1) {
       value = 1
@@ -105,7 +126,11 @@ const PageableTable: FC<PageableTableProps> = (props: PageableTableProps) => {
                   onDoubleClick={() => onRowDoubleClick ? onRowDoubleClick(row, rowIndex) : null}>
                 {columns.map((col, colIndex) => (
                   <td
-                    key={colIndex}>{col.renderer ? col.renderer(row[col.accessor], row, rowIndex) : row[col.accessor]}</td>
+                    key={colIndex}>{col.renderer ? col.renderer(
+                    row[col.accessor],
+                    row,
+                    rowIndex
+                  ) : row[col.accessor]}</td>
                 ))}
               </tr>
             ))

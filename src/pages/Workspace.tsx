@@ -1,12 +1,27 @@
-import {FC} from "react";
+/*
+ * Copyright (c) 2024 Uladzislau Lailo.
+ *
+ * All rights reserved.
+ *
+ * This source code, and any associated documentation, is the intellectual property of Uladzislau Lailo.
+ * Unauthorized copying, modification, distribution, or any form of reuse of this code, in whole or in part,
+ * without explicit permission from the copyright holder is strictly prohibited, except where explicitly permitted
+ * under applicable open-source licenses (if any).
+ *
+ * Licensed use:
+ * If the code is provided under an open-source license, you must follow the terms of that license, which can be found in the LICENSE file.
+ * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
+ */
+
+import { AccountCircle, Dataset, MoreVert, People } from "@mui/icons-material"
+import { FC } from "react"
 import "../styles/Workspace.css"
-import {NavLink, Outlet} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {RootState} from "../store/Store";
-import {AccountCircle, Dataset, MoreVert, People, VerifiedUser} from "@mui/icons-material";
+import { useSelector } from "react-redux"
+import { NavLink, Outlet } from "react-router-dom"
+import { RootState } from "../store/Store"
 
 export const Workspace: FC = () => {
-  const user = useSelector((state: RootState) => state.authState.user);
+  const user = useSelector((state: RootState) => state.authState.user)
 
   return <>
     <div className={"workspace"}>

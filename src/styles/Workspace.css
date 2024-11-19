@@ -1,105 +1,120 @@
+/*
+ * Copyright (c) 2024 Uladzislau Lailo.
+ *
+ * All rights reserved.
+ *
+ * This source code, and any associated documentation, is the intellectual property of Uladzislau Lailo.
+ * Unauthorized copying, modification, distribution, or any form of reuse of this code, in whole or in part,
+ * without explicit permission from the copyright holder is strictly prohibited, except where explicitly permitted
+ * under applicable open-source licenses (if any).
+ *
+ * Licensed use:
+ * If the code is provided under an open-source license, you must follow the terms of that license, which can be found in the LICENSE file.
+ * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
+ */
+
 .workspace {
-    display: flex;
+  display: flex;
 }
 
 .sidebar {
-    width: 250px;
-    height: 100vh;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-    border-right: 1px solid #ddd;
+  width: 250px;
+  height: 100vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  border-right: 1px solid #ddd;
 }
 
 .sidebar > .sidebar-nav-link:first-child {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 .sidebar .sidebar-nav-link a {
-    text-decoration: none;
-    color: #5a5b5b;
-    font-size: 20px;
-    font-weight: 350;
-    padding: .5rem;
-    margin-inline: .5rem;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    justify-content: flex-start;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+  text-decoration: none;
+  color: #5a5b5b;
+  font-size: 20px;
+  font-weight: 350;
+  padding: .5rem;
+  margin-inline: .5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .sidebar .sidebar-nav-link a:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 .sidebar .bottom-section {
-    margin-top: auto;
-    border-top: 1px solid #ddd;
-    padding: .5rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+  margin-top: auto;
+  border-top: 1px solid #ddd;
+  padding: .5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar .bottom-section .sidebar-nav-link {
-    flex: 1;
+  flex: 1;
 }
 
 .sidebar .bottom-section .more-btn {
-    display: flex;
-    align-items: center;
-    border-radius: 5px;
-    padding: .25rem;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  padding: .25rem;
 }
 
 .sidebar .bottom-section .more-btn:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 .main-content {
-    flex: 1;
-    width: calc(100vw - 250px);
+  flex: 1;
+  width: calc(100vw - 250px);
 }
 
 @media (max-width: 768px) {
-    .sidebar {
-        width: 50px;
-        justify-content: center;
-        align-items: center;
-    }
+  .sidebar {
+    width: 50px;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .sidebar .sidebar-nav-link {
-        padding: .25rem;
-    }
+  .sidebar .sidebar-nav-link {
+    padding: .25rem;
+  }
 
-    .sidebar .sidebar-nav-link a {
-        margin: 0;
-    }
+  .sidebar .sidebar-nav-link a {
+    margin: 0;
+  }
 
-    .sidebar .sidebar-nav-link a span {
-        display: none;
-    }
+  .sidebar .sidebar-nav-link a span {
+    display: none;
+  }
 
-    .sidebar .bottom-section {
-        flex-direction: column;
-        padding: 0;
-    }
+  .sidebar .bottom-section {
+    flex-direction: column;
+    padding: 0;
+  }
 
-    .sidebar .bottom-section .more-btn {
-        display: none;
-    }
+  .sidebar .bottom-section .more-btn {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
-    .sidebar {
-        display: none;
-    }
+  .sidebar {
+    display: none;
+  }
 
-    .main-content {
-        padding: 10px;
-    }
+  .main-content {
+    padding: 10px;
+  }
 }
