@@ -13,15 +13,37 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-import { DataGroup } from "./DataGroup"
+import { useState } from "react"
 
-export interface Dataset {
-  id: number
-  name: string
-  description: string
-  ownerId: number
-  creationDate: string
-  modificationDate: string
-  groups: DataGroup[]
-  _links: any
+interface ExpandCollapseState {
+  activeNodes: string[]
+}
+
+const initialState: ExpandCollapseState = {
+  activeNodes: []
+}
+
+export const useExpandCollapse = () => {
+  const [activeNodes, setActiveNodes] = useState(initialState.activeNodes)
+
+  const expand = (nodeId: string) => {
+    if (!isExpanded(nodeId)) {
+      setActiveNodes([...activeNodes, nodeId])
+    }
+  }
+
+  const collapse = (nodeId: string) => {
+    setActiveNodes(activeNodes.filter(id => id !== nodeId))
+  }
+
+  const isExpanded = (nodeId: string) => {
+    return activeNodes.includes(nodeId)
+  }
+
+  return {
+    activeNodes,
+    expand,
+    collapse,
+    isExpanded
+  }
 }

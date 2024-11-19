@@ -1,27 +1,41 @@
-import axios from "axios";
-import {Dataset} from "../models/Dataset";
-import {ApiResponse} from "../types/types";
-import {DataGroup} from "../models/DataGroup";
-import {store} from "../store/Store";
-import {DataFile} from "../models/DataFile";
-import {Pagination} from "../hooks/PaginationHook";
+/*
+ * Copyright (c) 2024 Uladzislau Lailo.
+ *
+ * All rights reserved.
+ *
+ * This source code, and any associated documentation, is the intellectual property of Uladzislau Lailo.
+ * Unauthorized copying, modification, distribution, or any form of reuse of this code, in whole or in part,
+ * without explicit permission from the copyright holder is strictly prohibited, except where explicitly permitted
+ * under applicable open-source licenses (if any).
+ *
+ * Licensed use:
+ * If the code is provided under an open-source license, you must follow the terms of that license, which can be found in the LICENSE file.
+ * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
+ */
+
+import axios from "axios"
+import { Pagination } from "../hooks/PaginationHook"
+import { DataGroup } from "../models/DataGroup"
+import { Dataset } from "../models/Dataset"
+import { store } from "../store/Store"
+import { ApiResponse } from "../types/types"
 
 const datasetApi = axios.create({
-  baseURL: process.env.REACT_APP_DATASETS_API_URL
-})
+                                  baseURL: process.env.REACT_APP_DATASETS_API_URL
+                                })
 
 datasetApi.interceptors.request.use(
   (config) => {
     const user = store.getState().authState.user
 
     if (user) {
-      config.headers['X-User-Id'] = user.id
+      config.headers["X-User-Id"] = user.id
     }
 
     return config
   },
   (error) => Promise.reject(error)
-);
+)
 
 export const getDatasets = async (pagination?: Pagination): Promise<ApiResponse<Dataset[]>> => {
   const response = await datasetApi.get("/list", {
@@ -29,10 +43,10 @@ export const getDatasets = async (pagination?: Pagination): Promise<ApiResponse<
       size: pagination?.size,
       page: pagination?.number
     }
-  });
+  })
 
   const body = response.data
-  const page = body.page;
+  const page = body.page
 
   if (page) {
     pagination?.setPagination(page)
@@ -82,54 +96,13 @@ export const downloadDataset = async (datasetId: number) => {
 
   const blob = new Blob([response.data])
 
-  const blobUrl = URL.createObjectURL(blob);
+  const blobUrl = URL.createObjectURL(blob)
 
-  const link = document.createElement('a')
+  const link = document.createElement("a")
   link.href = blobUrl
   link.download = filename
   link.click()
 
-  link.remove();
-  URL.revokeObjectURL(blobUrl);
-}
-
-export const downloadFile = (file: DataFile) => {
-  const user = store.getState().authState.user
-
-  if (!user) {
-    return
-  }
-
-  const headers = new Headers();
-  headers.append("X-User-Id", user.id.toString())
-
-  let filename: string | undefined = ""
-
-  fetch(file._links.resource.href, {headers: headers})
-    .then(response => {
-      if (!response.ok) {
-        throw new Error()
-      }
-
-      const contentDisposition = response.headers.get("Content-Disposition")
-
-      if (!contentDisposition) {
-        throw new Error()
-      }
-
-      const match = contentDisposition.match(/filename="(.+?)"/);
-
-      if (match && match[1]) {
-        filename = match[1]
-      }
-
-      return response.blob()
-    })
-    .then(blob => {
-      const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = filename!
-      link.click()
-    })
-    .catch(error => console.error('Error downloading file:', error));
+  link.remove()
+  URL.revokeObjectURL(blobUrl)
 }

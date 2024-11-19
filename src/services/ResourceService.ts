@@ -1,4 +1,19 @@
-import {store} from "../store/Store";
+/*
+ * Copyright (c) 2024 Uladzislau Lailo.
+ *
+ * All rights reserved.
+ *
+ * This source code, and any associated documentation, is the intellectual property of Uladzislau Lailo.
+ * Unauthorized copying, modification, distribution, or any form of reuse of this code, in whole or in part,
+ * without explicit permission from the copyright holder is strictly prohibited, except where explicitly permitted
+ * under applicable open-source licenses (if any).
+ *
+ * Licensed use:
+ * If the code is provided under an open-source license, you must follow the terms of that license, which can be found in the LICENSE file.
+ * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
+ */
+
+import { store } from "../store/Store"
 
 export const downloadResorce = (url: string) => {
   const user = store.getState().authState.user
@@ -7,7 +22,7 @@ export const downloadResorce = (url: string) => {
     return
   }
 
-  const headers = new Headers();
+  const headers = new Headers()
   headers.append("X-User-Id", user.id.toString())
 
   let filename: string | undefined = ""
@@ -24,7 +39,7 @@ export const downloadResorce = (url: string) => {
         throw new Error("Content-Disposition header was not provided")
       }
 
-      const match = contentDisposition.match(/filename="(.+?)"/);
+      const match = contentDisposition.match(/filename="(.+?)"/)
 
       if (match && match[1]) {
         filename = match[1]
@@ -35,5 +50,5 @@ export const downloadResorce = (url: string) => {
         blob: response.blob()
       }
     })
-    .catch(error => console.error('Error downloading resource:', error));
+    .catch(error => console.error("Error downloading resource:", error))
 }
