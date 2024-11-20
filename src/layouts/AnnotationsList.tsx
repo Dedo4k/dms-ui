@@ -13,36 +13,26 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-.dataset-editor {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
+import React, { FC } from "react"
+import "../styles/AnnotationsList.css"
+import { Annotation, Object } from "../store/BufferSlice"
+
+interface AnnotationsListProps {
+  annotation: Annotation
 }
 
-.dataset-editor .groups {
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid #ddd;
-  overflow: auto;
-  padding: .25rem;
-}
+export const AnnotationsList: FC<AnnotationsListProps> = (props: AnnotationsListProps) => {
+  const {annotation} = props
 
-.dataset-editor .annotations {
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  border-left: 1px solid #ddd;
-  padding: .25rem;
-}
-
-.dataset-editor .editor {
-  position: relative;
-  flex: 1;
-  overflow: auto;
-}
-
-.dataset-editor .groups .groups-list {
-  width: fit-content;
-  overflow: auto;
+  return <>
+    <div className="annotations-list">
+      {
+        annotation?.layout?.objects.map((object: Object, index: number) => <React.Fragment key={index}>
+          <div className={"annotation"}>
+            <div>{object.name}</div>
+          </div>
+        </React.Fragment>)
+      }
+    </div>
+  </>
 }

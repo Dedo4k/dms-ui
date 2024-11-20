@@ -18,6 +18,8 @@ import "../styles/DatasetEditor.css"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { Tree, TreeNode } from "../components/tree/Tree"
+import { AnnotationsList } from "../layouts/AnnotationsList"
+import { AnnotationsView } from "../layouts/AnnotationsView"
 import { DataGroup } from "../models/DataGroup"
 import { setCurrent } from "../store/BufferSlice"
 import { RootState, store } from "../store/Store"
@@ -80,8 +82,6 @@ export const DatasetEditor: FC = () => {
     }
   }
 
-  console.log(bufferState.annotations)
-
   return <>
     <div className="dataset-editor">
       <div className={"groups"}>
@@ -96,10 +96,11 @@ export const DatasetEditor: FC = () => {
         </div>
       </div>
       <div className={"editor"}>
-        <img src={bufferState.annotations[bufferState.current]?.imageUrl} alt={""}/>
+        <img src={bufferState.annotations[bufferState.current]?.imageUrl} alt={""} className={"annotation-img"}/>
+        <AnnotationsView annotation={bufferState.annotations[bufferState.current]}/>
       </div>
       <div className={"annotations"}>
-        <div>{bufferState.annotations[bufferState.current]?.layout}</div>
+        <AnnotationsList annotation={bufferState.annotations[bufferState.current]}/>
       </div>
     </div>
   </>

@@ -80,6 +80,18 @@ const PageableTable: FC<PageableTableProps> = (props: PageableTableProps) => {
     page.setNumber(0)
   }
 
+  const handleOnRowClick = (row: any, rowIndex: number, e: React.MouseEvent<HTMLTableRowElement>) => {
+    e.stopPropagation()
+
+    onRowClick && onRowClick(row, rowIndex)
+  }
+
+  const handleOnRowDoubleClick = (row: any, rowIndex: number, e: React.MouseEvent<HTMLTableRowElement>) => {
+    e.stopPropagation()
+
+    onRowDoubleClick && onRowDoubleClick(row, rowIndex)
+  }
+
   return <>
     <div className={"pageable-table-container"}>
       {
@@ -122,8 +134,8 @@ const PageableTable: FC<PageableTableProps> = (props: PageableTableProps) => {
           {
             data.map((row, rowIndex) => (
               <tr key={rowIndex}
-                  onClick={() => onRowClick ? onRowClick(row, rowIndex) : null}
-                  onDoubleClick={() => onRowDoubleClick ? onRowDoubleClick(row, rowIndex) : null}>
+                  onClick={(e) => handleOnRowClick(row, rowIndex, e)}
+                  onDoubleClick={(e) => handleOnRowDoubleClick(row, rowIndex, e)}>
                 {columns.map((col, colIndex) => (
                   <td
                     key={colIndex}>{col.renderer ? col.renderer(

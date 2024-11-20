@@ -13,36 +13,14 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-.dataset-editor {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
+.annotations-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.dataset-editor .groups {
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid #ddd;
-  overflow: auto;
-  padding: .25rem;
-}
+.annotations-view .bndbox {
 
-.dataset-editor .annotations {
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  border-left: 1px solid #ddd;
-  padding: .25rem;
-}
-
-.dataset-editor .editor {
-  position: relative;
-  flex: 1;
-  overflow: auto;
-}
-
-.dataset-editor .groups .groups-list {
-  width: fit-content;
-  overflow: auto;
 }
