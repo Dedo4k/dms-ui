@@ -37,8 +37,22 @@
 }
 
 .dataset-editor .editor {
-  position: relative;
   flex: 1;
+  overflow: hidden;
+}
+
+.dataset-editor .editor .editor-controls {
+  height: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: .5rem;
+}
+
+.dataset-editor .editor .editor-view {
+  position: relative;
+  height: calc(100% - 2rem);
   overflow: auto;
 }
 

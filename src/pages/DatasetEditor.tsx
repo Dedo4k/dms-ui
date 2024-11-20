@@ -20,6 +20,7 @@ import { useParams } from "react-router-dom"
 import { Tree, TreeNode } from "../components/tree/Tree"
 import { AnnotationsList } from "../layouts/AnnotationsList"
 import { AnnotationsView } from "../layouts/AnnotationsView"
+import { EditorControls } from "../layouts/EditorControls"
 import { DataGroup } from "../models/DataGroup"
 import { setCurrent } from "../store/BufferSlice"
 import { RootState, store } from "../store/Store"
@@ -96,8 +97,11 @@ export const DatasetEditor: FC = () => {
         </div>
       </div>
       <div className={"editor"}>
-        <img src={bufferState.annotations[bufferState.current]?.imageUrl} alt={""} className={"annotation-img"}/>
-        <AnnotationsView annotation={bufferState.annotations[bufferState.current]}/>
+        <EditorControls/>
+        <div className={"editor-view"}>
+          <img src={bufferState.annotations[bufferState.current]?.imageUrl} alt={""} className={"annotation-img"}/>
+          <AnnotationsView annotation={bufferState.annotations[bufferState.current]}/>
+        </div>
       </div>
       <div className={"annotations"}>
         <AnnotationsList annotation={bufferState.annotations[bufferState.current]}/>
