@@ -16,6 +16,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { DataGroup } from "../models/DataGroup"
 import { Dataset } from "../models/Dataset"
+import { parseLayoutFromXml } from "../services/AnnotationService"
 import { getDataset, getGroups } from "../services/DatasetApi"
 import { addAnnotation, Annotation, AnnotationInfo } from "./BufferSlice"
 import { RootState } from "./Store"
@@ -104,10 +105,18 @@ export const fetchAnnotation = createAsyncThunk<Annotation, AnnotationInfo>(
 
     const [imageBlob, layoutBlob] = await Promise.all([imagePromise, layoutPromise])
 
+    let layout
+
+    try {
+      layout = await parseLayoutFromXml(layoutBlob)
+    } catch (e) {
+
+    }
+
     return {
       id: annotationInfo.id,
       imageUrl: URL.createObjectURL(imageBlob),
-      layout: await layoutBlob.text()
+      layout
     } as Annotation
   }
 )

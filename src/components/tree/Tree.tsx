@@ -41,7 +41,9 @@ export const Tree: FC<TreeProps> = (props: TreeProps) => {
     isExpanded
   } = useExpandCollapse()
 
-  const toggleExpandCollapse = (nodeId: string) => {
+  const toggleExpandCollapse = (nodeId: string, e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+
     if (isExpanded(nodeId)) {
       collapse(nodeId)
     } else {
@@ -49,19 +51,28 @@ export const Tree: FC<TreeProps> = (props: TreeProps) => {
     }
   }
 
+  const handleOnNodeClick = (node: TreeNode, nodeId: string, e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+
+    onNodeClick && onNodeClick(node, nodeId)
+  }
+
   const renderNode = (node: TreeNode, nodeId: string) => {
     return <React.Fragment key={nodeId}>
       <div id={nodeId} className={"tree-node"}>
-        <div className={`tree-node-data ${isExpanded(nodeId) ? "expanded" : "collapsed"}`}>
+        <div className={`tree-node-data ${isExpanded(nodeId) ? "expanded" : "collapsed"}`}
+             onClick={(e) => handleOnNodeClick(node, nodeId, e)}>
           {
-            node.children.length > 0 &&
-              <div className={"expand-collapse"} onClick={() => toggleExpandCollapse(nodeId)}>
+            node
+              .children.length > 0 &&
+              <div className={"expand-collapse"} onClick={(e) => toggleExpandCollapse(nodeId, e)}>
                 {
-                  isExpanded(nodeId) ? <KeyboardArrowDown fontSize={"small"}/> : <ChevronRight fontSize={"small"}/>
+                  isExpanded(nodeId) ? <KeyboardArrowDown fontSize={"small"}/> :
+                    <ChevronRight fontSize={"small"}/>
                 }
               </div>
           }
-          <div className={node.children.length === 0 ? "no-children" : ""} onClick={() => onNodeClick(node, nodeId)}>
+          <div className={node.children.length === 0 ? "no-children" : ""}>
             {
               dataRenderer ? dataRenderer(node.data) : node.data
             }

@@ -37,7 +37,7 @@ export interface AnnotationInfo {
 export interface Annotation {
   id: number
   imageUrl: string
-  layout: string
+  layout: Layout
 }
 
 const initialState: BufferState = {
@@ -50,13 +50,47 @@ const initialState: BufferState = {
   initialized: false
 }
 
+export interface Layout {
+  size: {
+    width: number
+    height: number
+    depth: number
+  }
+  objects: Object[]
+}
+
+export interface Object {
+  name: string
+  pose: string
+  truncated: number
+  difficult: number
+  layout: LayoutObject
+}
+
+export interface Bndbox {
+  type: "bndbox"
+  xmin: number
+  ymin: number
+  xmax: number
+  ymax: number
+}
+
+export interface Polygon {
+  type: "polygon"
+  points: {
+    x: number,
+    y: number
+  }[]
+}
+
+export type LayoutObject = Bndbox | Polygon
+
 export const bufferSlice = createSlice({
                                          name: "annotations",
                                          initialState,
                                          reducers: {
                                            setCurrent: (state: BufferState, action: PayloadAction<number>) => {
                                              state.current = state.annotations.findIndex(annotation => {
-                                               console.log(annotation.id, action.payload)
                                                return annotation.id === action.payload
                                              })
                                            },
