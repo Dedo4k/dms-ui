@@ -15,10 +15,11 @@
 
 import React, { FC } from "react"
 import "../styles/AnnotationsList.css"
-import { Annotation, Object } from "../store/BufferSlice"
+import { Annotation, Object } from "../models/Annotation"
+
 
 interface AnnotationsListProps {
-  annotation: Annotation
+  annotation: Annotation | null
 }
 
 export const AnnotationsList: FC<AnnotationsListProps> = (props: AnnotationsListProps) => {

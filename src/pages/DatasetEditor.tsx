@@ -18,13 +18,14 @@ import "../styles/DatasetEditor.css"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { Tree, TreeNode } from "../components/tree/Tree"
+import { usePagination } from "../hooks/PaginationHook"
 import { AnnotationsList } from "../layouts/AnnotationsList"
 import { AnnotationsView } from "../layouts/AnnotationsView"
 import { EditorControls } from "../layouts/EditorControls"
 import { DataGroup } from "../models/DataGroup"
-import { setCurrent } from "../store/BufferSlice"
+import { setCurrent } from "../store/EditorStore"
 import { RootState, store } from "../store/Store"
-import { fetchDataset, fetchDatasetGroups, fillBuffer } from "../store/StoreActions"
+import { fetchAnnotation, fetchDataset, fetchDatasetGroups } from "../store/StoreActions"
 
 export const DatasetEditor: FC = () => {
   const dispatch = useDispatch<typeof store.dispatch>()
@@ -38,10 +39,9 @@ export const DatasetEditor: FC = () => {
   const datasetId = Number.parseInt(id)
 
   const editorState = useSelector((state: RootState) => state.editorState)
-  const bufferState = useSelector((state: RootState) => state.bufferState)
+  const pagination = usePagination({size: 20})
 
-
-  const treeData: TreeNode[] = editorState.dataset?.groups?.map(group => ({
+  const treeData: TreeNode[] = editorState.groups?.map(group => ({
     data: {
       ...group,
       type: "group"
@@ -58,12 +58,18 @@ export const DatasetEditor: FC = () => {
   useEffect(() => {
     const loadData = async () => {
       const dataset = await dispatch(fetchDataset(datasetId)).unwrap()
-      await dispatch(fetchDatasetGroups(dataset.id))
-      dispatch(fillBuffer())
+      await dispatch(fetchDatasetGroups({
+                                          datasetId: dataset.id,
+                                          pagination
+                                        }))
     }
 
     loadData()
   }, [])
+
+  useEffect(() => {
+    dispatch(fetchAnnotation())
+  }, [editorState.current])
 
   const onNodeClick = (node: TreeNode, nodeId: string) => {
     const data = node.data
@@ -73,6 +79,10 @@ export const DatasetEditor: FC = () => {
     } else if (data.type === "file") {
 
     }
+  }
+
+  const isNodeActive = (node: TreeNode) => {
+    return editorState.current?.id === node.data.id
   }
 
   const nodeDataRenderer = (data: any) => {
@@ -87,24 +97,28 @@ export const DatasetEditor: FC = () => {
     <div className="dataset-editor">
       <div className={"groups"}>
         <div className="dataset-info">
-          <div>{editorState.dataset?.name}</div>
-          <div>{editorState.dataset?.description}</div>
+          <div className={"dataset-name"}>{editorState.dataset?.name}</div>
+          <div className={"dataset-description"}>{editorState.dataset?.description}</div>
+          <div className="groups-info">
+            <div className={"total-groups"}>Groups: {editorState.groups.length} of {pagination?.totalElements}</div>
+          </div>
         </div>
         <div className="groups-list">
           {
-            treeData && <Tree nodes={treeData} dataRenderer={nodeDataRenderer} onNodeClick={onNodeClick}/>
+            treeData &&
+              <Tree nodes={treeData} dataRenderer={nodeDataRenderer} onNodeClick={onNodeClick} isActive={isNodeActive}/>
           }
         </div>
       </div>
       <div className={"editor"}>
         <EditorControls/>
         <div className={"editor-view"}>
-          <img src={bufferState.annotations[bufferState.current]?.imageUrl} alt={""} className={"annotation-img"}/>
-          <AnnotationsView annotation={bufferState.annotations[bufferState.current]}/>
+          <img src={editorState.annotation?.imageObjectUrl} alt={""} className={"annotation-img"}/>
+          <AnnotationsView annotation={editorState.annotation}/>
         </div>
       </div>
       <div className={"annotations"}>
-        <AnnotationsList annotation={bufferState.annotations[bufferState.current]}/>
+        <AnnotationsList annotation={editorState.annotation}/>
       </div>
     </div>
   </>

@@ -13,7 +13,8 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-import { Layout, LayoutObject, Object } from "../store/BufferSlice"
+
+import { Layout, LayoutObject, Object } from "../models/Annotation"
 
 export const parseLayoutFromXml = async (data: Blob): Promise<Layout> => {
   const xmlString = await data.text()
@@ -36,33 +37,34 @@ export const parseLayoutFromXml = async (data: Blob): Promise<Layout> => {
 
   const objects: Object[] = Array.from(xml.querySelectorAll("object"))
                                  .map((objectElement) => {
-                                   const name = objectElement.querySelector("name")?.textContent || "unknown"
-                                   const pose = objectElement.querySelector("pose")?.textContent || "unknown"
-                                   const truncated = parseInt(
-                                     objectElement.querySelector("truncated")?.textContent || "0",
-                                     10
-                                   )
-                                   const difficult = parseInt(
-                                     objectElement.querySelector("difficult")?.textContent || "0",
-                                     10
-                                   )
+                                        const name = objectElement.querySelector("name")?.textContent || "unknown"
+                                        const pose = objectElement.querySelector("pose")?.textContent || "unknown"
+                                        const truncated = parseInt(
+                                          objectElement.querySelector("truncated")?.textContent || "0",
+                                          10
+                                        )
+                                        const difficult = parseInt(
+                                          objectElement.querySelector("difficult")?.textContent || "0",
+                                          10
+                                        )
 
-                                   const bndboxElement = objectElement.querySelector("bndbox")
+                                        const bndboxElement = objectElement.querySelector("bndbox")
 
-                                   return {
-                                     name,
-                                     pose,
-                                     truncated,
-                                     difficult,
-                                     layout: {
-                                       type: "bndbox",
-                                       xmin: parseInt(bndboxElement?.querySelector("xmin")?.textContent || "0", 10),
-                                       ymin: parseInt(bndboxElement?.querySelector("ymin")?.textContent || "0", 10),
-                                       xmax: parseInt(bndboxElement?.querySelector("xmax")?.textContent || "0", 10),
-                                       ymax: parseInt(bndboxElement?.querySelector("ymax")?.textContent || "0", 10)
-                                     } as LayoutObject
-                                   }
-                                 })
+                                        return {
+                                          name,
+                                          pose,
+                                          truncated,
+                                          difficult,
+                                          layout: {
+                                            type: "bndbox",
+                                            xmin: parseInt(bndboxElement?.querySelector("xmin")?.textContent || "0", 10),
+                                            ymin: parseInt(bndboxElement?.querySelector("ymin")?.textContent || "0", 10),
+                                            xmax: parseInt(bndboxElement?.querySelector("xmax")?.textContent || "0", 10),
+                                            ymax: parseInt(bndboxElement?.querySelector("ymax")?.textContent || "0", 10)
+                                          } as LayoutObject
+                                        }
+                                      }
+                                 )
 
   return {
     size,

@@ -15,10 +15,10 @@
 
 import React, { FC } from "react"
 import "../styles/AnnotationView.css"
-import { Annotation, Bndbox, Object, Polygon } from "../store/BufferSlice"
+import { Annotation, Bndbox, Object, Polygon } from "../models/Annotation"
 
 interface AnnotationsViewProps {
-  annotation: Annotation
+  annotation: Annotation | null
 }
 
 export const AnnotationsView: FC<AnnotationsViewProps> = (props: AnnotationsViewProps) => {

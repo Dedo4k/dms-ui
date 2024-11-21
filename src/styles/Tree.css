@@ -19,6 +19,7 @@
   overflow: auto;
   align-items: stretch;
   justify-content: center;
+  width: fit-content;
 }
 
 .tree-container .tree-node .tree-node {
@@ -52,6 +53,10 @@
 
 .tree-container .tree-node .tree-node-data .no-children {
   margin-left: 1rem;
+}
+
+.tree-container .tree-node .tree-node-data.active {
+  background-color: #e0e0e0;
 }
 
 .tree-container .tree-node .tree-node-data:hover {
