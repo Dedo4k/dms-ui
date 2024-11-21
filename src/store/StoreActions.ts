@@ -14,11 +14,12 @@
  */
 
 import { createAsyncThunk } from "@reduxjs/toolkit"
+import { Pagination } from "../hooks/PaginationHook"
+import { Annotation } from "../models/Annotation"
 import { DataGroup } from "../models/DataGroup"
 import { Dataset } from "../models/Dataset"
 import { parseLayoutFromXml } from "../services/AnnotationService"
 import { getDataset, getGroups } from "../services/DatasetApi"
-import { addAnnotation, Annotation, AnnotationInfo } from "./BufferSlice"
 import { RootState } from "./Store"
 
 export const fetchDataset = createAsyncThunk<Dataset, number>(
@@ -30,76 +31,46 @@ export const fetchDataset = createAsyncThunk<Dataset, number>(
   }
 )
 
-export const fetchDatasetGroups = createAsyncThunk<DataGroup[], number>(
+export const fetchDatasetGroups = createAsyncThunk<DataGroup[], {
+  datasetId: number,
+  pagination: Pagination
+}>(
   "fetchDatasetGroups",
-  async (datasetId: number) => {
-    const response = await getGroups(datasetId)
+  async ({
+           datasetId,
+           pagination
+         }) => {
+    const response = await getGroups(datasetId, pagination)
 
     return response.data
   }
 )
 
-export const fillBuffer = createAsyncThunk(
-  "fillBuffer",
-  async (_,
-         {
-           getState,
-           dispatch
-         }) => {
-    const {
-      current,
-      cursor,
-      size,
-      loadFactor,
-      downloadInfo,
-      annotations
-    } = (getState() as RootState).bufferState
-
-    const nextDownload = size * loadFactor - annotations.length + current
-    const prevDownload = size - size * loadFactor - current
-
-    let nextEndIndex = cursor + annotations.length - current + nextDownload
-    let prevEndIndex = cursor - current - prevDownload
-
-    if (nextEndIndex >= downloadInfo.length) {
-      nextEndIndex = downloadInfo.length - 1
-    }
-
-    if (prevEndIndex < 0) {
-      prevEndIndex = 0
-    }
-
-    const nextDownloadInfo = downloadInfo.slice(cursor, nextEndIndex)
-    const prevDownloadInfo = downloadInfo.slice(prevEndIndex, cursor)
-
-    for (const downloadInfo of [...nextDownloadInfo, ...prevDownloadInfo]) {
-      const annotation = await dispatch(fetchAnnotation(downloadInfo)).unwrap()
-      dispatch(addAnnotation(annotation))
-    }
-  }
-)
-
-export const fetchAnnotation = createAsyncThunk<Annotation, AnnotationInfo>(
+export const fetchAnnotation = createAsyncThunk<Annotation>(
   "fetchAnnotation",
-  async (annotationInfo: AnnotationInfo,
-         {
-           getState
-         }) => {
-    const user = (getState() as RootState).authState.user
+  async (_, {getState}) => {
+    const {
+      authState,
+      editorState
+    } = getState() as RootState
 
-    if (!user) {
+    if (!authState.user) {
       throw new Error("User is not authenticated")
     }
 
     const headers = {
-      "X-User-Id": user.id.toString()
+      "X-User-Id": authState.user.id.toString()
     }
 
-    const imagePromise = fetch(annotationInfo.imageUrl, {
+    const image = editorState.current?.files.find(file => file.fileName.includes(".jpg"))
+
+    const imagePromise = image && fetch(image?._links.resource.href, {
       headers: headers
     }).then(res => res.blob())
 
-    const layoutPromise = fetch(annotationInfo.layoutUrl, {
+    const xml = editorState.current?.files.find(file => file.fileName.includes(".xml"))
+
+    const layoutPromise = xml && fetch(xml._links.resource.href, {
       headers: headers
     }).then(res => res.blob())
 
@@ -108,15 +79,14 @@ export const fetchAnnotation = createAsyncThunk<Annotation, AnnotationInfo>(
     let layout
 
     try {
-      layout = await parseLayoutFromXml(layoutBlob)
+      layout = layoutBlob && await parseLayoutFromXml(layoutBlob)
     } catch (e) {
 
     }
 
     return {
-      id: annotationInfo.id,
-      imageUrl: URL.createObjectURL(imageBlob),
+      imageObjectUrl: imageBlob && URL.createObjectURL(imageBlob),
       layout
-    } as Annotation
+    }
   }
 )

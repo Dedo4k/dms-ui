@@ -13,8 +13,6 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-import { DataGroup } from "./DataGroup"
-
 export interface Dataset {
   id: number
   name: string
@@ -22,6 +20,5 @@ export interface Dataset {
   ownerId: number
   creationDate: string
   modificationDate: string
-  groups: DataGroup[]
   _links: any
 }

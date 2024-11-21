@@ -31,16 +31,17 @@ const initialState: UserAuthState = {
   token: "sadf3fdsdjhfh7yh2983hjd7sa91230-fiu09eh02i3"
 }
 
-export const userSlice = createSlice({
-                                       name: "user",
-                                       initialState,
-                                       reducers: {
-                                         login: (state: UserAuthState, action: PayloadAction<User>) => {
-                                           state.user = action.payload
-                                         }
-                                       }
-                                     })
+export const authStore = createSlice(
+  {
+    name: "authSlice",
+    initialState,
+    reducers: {
+      login: (state: UserAuthState, action: PayloadAction<User>) => {
+        state.user = action.payload
+      }
+    }
+  })
 
-export const {login} = userSlice.actions
+export const {login} = authStore.actions
 
-export default userSlice.reducer
+export default authStore.reducer

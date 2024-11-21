@@ -13,13 +13,42 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-import { Pagination } from "../hooks/PaginationHook"
-import { addDatasets } from "../store/DatasetsStore"
-import { store } from "../store/Store"
-import { getDatasets } from "./DatasetApi"
-
-export const fetchDatasets = async (pagination?: Pagination) => {
-  const apiResponse = await getDatasets(pagination)
-
-  store.dispatch(addDatasets(apiResponse.data))
+export interface Annotation {
+  imageObjectUrl?: string
+  layout?: Layout
 }
+
+export interface Layout {
+  size: {
+    width: number
+    height: number
+    depth: number
+  }
+  objects: Object[]
+}
+
+export interface Object {
+  name: string
+  pose: string
+  truncated: number
+  difficult: number
+  layout: LayoutObject
+}
+
+export interface Bndbox {
+  type: "bndbox"
+  xmin: number
+  ymin: number
+  xmax: number
+  ymax: number
+}
+
+export interface Polygon {
+  type: "polygon"
+  points: {
+    x: number,
+    y: number
+  }[]
+}
+
+export type LayoutObject = Bndbox | Polygon

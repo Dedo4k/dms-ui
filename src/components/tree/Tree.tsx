@@ -22,6 +22,7 @@ interface TreeProps {
   nodes: TreeNode[]
   onNodeClick: (node: TreeNode, nodeId: string) => void
   dataRenderer?: (node: any) => ReactNode
+  isActive?: (node: TreeNode) => boolean
 }
 
 export interface TreeNode {
@@ -33,7 +34,8 @@ export const Tree: FC<TreeProps> = (props: TreeProps) => {
   const {
     nodes,
     dataRenderer,
-    onNodeClick
+    onNodeClick,
+    isActive
   } = props
   const {
     expand,
@@ -60,7 +62,7 @@ export const Tree: FC<TreeProps> = (props: TreeProps) => {
   const renderNode = (node: TreeNode, nodeId: string) => {
     return <React.Fragment key={nodeId}>
       <div id={nodeId} className={"tree-node"}>
-        <div className={`tree-node-data ${isExpanded(nodeId) ? "expanded" : "collapsed"}`}
+        <div className={`tree-node-data ${isExpanded(nodeId) ? "expanded" : "collapsed"} ${isActive && isActive(node) ? " active" : ""}`}
              onClick={(e) => handleOnNodeClick(node, nodeId, e)}>
           {
             node

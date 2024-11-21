@@ -14,19 +14,19 @@
  */
 
 import { configureStore } from "@reduxjs/toolkit"
-import bufferReducer from "./BufferSlice"
-import datasetsReducer from "./DatasetSlice"
-import editorReducer from "./EditorSlice"
-import userReducer from "./UserSlice"
+import userReducer from "./AuthStore"
+import datasetsReducer from "./DatasetsStore"
+import editorReducer from "./EditorStore"
 
-export const store = configureStore({
-                                      reducer: {
-                                        authState: userReducer,
-                                        datasetsState: datasetsReducer,
-                                        bufferState: bufferReducer,
-                                        editorState: editorReducer
-                                      }
-                                    })
+export const store = configureStore(
+  {
+    reducer: {
+      authState: userReducer,
+      datasetsState: datasetsReducer,
+      editorState: editorReducer
+    }
+  }
+)
 
 export type AppStore = typeof store
 export type RootState = ReturnType<AppStore["getState"]>

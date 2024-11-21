@@ -65,11 +65,23 @@ export const getDataset = async (datasetId: number): Promise<ApiResponse<Dataset
   }
 }
 
-export const getGroups = async (datasetId: number): Promise<ApiResponse<DataGroup[]>> => {
-  const response = await datasetApi.get(`/${datasetId}/groups`)
+export const getGroups = async (datasetId: number, pagination?: Pagination): Promise<ApiResponse<DataGroup[]>> => {
+  const response = await datasetApi.get(`/${datasetId}/groups`, {
+    params: {
+      size: pagination?.size,
+      number: pagination?.number
+    }
+  })
+
+  const data = response.data
+  const page = data.page
+
+  if (page) {
+    pagination?.setPagination(page)
+  }
 
   return {
-    data: response.data._embedded?.groups || []
+    data: data._embedded?.groups || []
   }
 }
 
