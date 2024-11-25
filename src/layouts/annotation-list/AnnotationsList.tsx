@@ -14,22 +14,37 @@
  */
 
 import React, { FC } from "react"
-import "../styles/AnnotationsList.css"
-import { Annotation, Object } from "../models/Annotation"
+import "../../styles/AnnotationsList.css"
+import { useDispatch, useSelector } from "react-redux"
+import { Object } from "../../models/Annotation"
+import { toggleObject } from "../../store/EditorStore"
+import { RootState } from "../../store/Store"
+import { AnnotationsListControls } from "./AnnotationsListControls"
 
 
 interface AnnotationsListProps {
-  annotation: Annotation | null
 }
 
 export const AnnotationsList: FC<AnnotationsListProps> = (props: AnnotationsListProps) => {
-  const {annotation} = props
+  const dispatch = useDispatch()
+  const editorState = useSelector((state: RootState) => state.editorState)
+
+  const handleObjectClick = (object: Object, e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+
+    dispatch(toggleObject({
+                            object,
+                            ctrlKey: e.ctrlKey
+                          }))
+  }
 
   return <>
     <div className="annotations-list">
+      <AnnotationsListControls/>
       {
-        annotation?.layout?.objects.map((object: Object, index: number) => <React.Fragment key={index}>
-          <div className={"annotation"}>
+        editorState.annotation?.layout?.objects.map((object: Object, index: number) => <React.Fragment key={index}>
+          <div className={`annotation ${editorState.selectedObjects.includes(object) ? "selected" : ""}`}
+               onClick={(e) => handleObjectClick(object, e)}>
             <div>{object.name}</div>
           </div>
         </React.Fragment>)

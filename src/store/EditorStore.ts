@@ -14,7 +14,7 @@
  */
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Annotation } from "../models/Annotation"
+import { Annotation, Object } from "../models/Annotation"
 import { DataGroup } from "../models/DataGroup"
 import { Dataset } from "../models/Dataset"
 import { fetchAnnotation, fetchDataset, fetchDatasetGroups } from "./StoreActions"
@@ -24,6 +24,7 @@ interface EditorState {
   groups: DataGroup[]
   current: DataGroup | null
   annotation: Annotation | null
+  selectedObjects: Object[]
   status: "initial" | "loading" | "loaded" | "initialized" | "error"
 }
 
@@ -32,6 +33,7 @@ const initialState: EditorState = {
   groups: [],
   current: null,
   annotation: null,
+  selectedObjects: [],
   status: "initial"
 }
 
@@ -47,6 +49,41 @@ export const editorStore = createSlice(
         const group = state.groups.find(group => group.id === action.payload)
         if (group) {
           state.current = group
+        }
+      },
+      selectAllObjects: (state: EditorState) => {
+        const objects = state.annotation?.layout?.objects
+        if (objects) {
+          state.selectedObjects = objects
+        }
+      },
+      clearObjectSelection: (state: EditorState) => {
+        state.selectedObjects = []
+      },
+      toggleObject: (
+        state: EditorState,
+        action: PayloadAction<{
+          object: Object,
+          ctrlKey: boolean
+        }>
+      ) => {
+        const {
+          object,
+          ctrlKey
+        } = action.payload
+        if (state.selectedObjects.find(obj => obj.id === object.id)) {
+          if (!ctrlKey && state.selectedObjects.length > 1) {
+            state.selectedObjects = []
+          } else {
+            state.selectedObjects = state.selectedObjects.filter(obj => obj.id !== object.id)
+          }
+        } else {
+          if (ctrlKey && !state.selectedObjects.find(obj => obj.id === object.id)) {
+            state.selectedObjects.push(object)
+          } else {
+            state.selectedObjects = []
+            state.selectedObjects.push(object)
+          }
         }
       }
     },
@@ -87,6 +124,7 @@ export const editorStore = createSlice(
             URL.revokeObjectURL(state.annotation.imageObjectUrl)
           }
           state.annotation = action.payload
+          state.selectedObjects = []
           state.status = "loaded"
         })
     }
@@ -94,7 +132,10 @@ export const editorStore = createSlice(
 
 export const {
   setDataset,
-  setCurrent
+  setCurrent,
+  selectAllObjects,
+  clearObjectSelection,
+  toggleObject
 } = editorStore.actions
 
 export default editorStore.reducer

@@ -16,7 +16,7 @@
 import React from "react"
 import "./styles/App.css"
 import { Route, Routes } from "react-router-dom"
-import { Datasets } from "./layouts/Datasets"
+import { Datasets } from "./layouts/datasets/Datasets"
 import { DatasetEditor } from "./pages/DatasetEditor"
 import { Workspace } from "./pages/Workspace"
 
