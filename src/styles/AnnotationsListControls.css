@@ -13,43 +13,23 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-export interface Annotation {
-  imageObjectUrl?: string
-  layout?: Layout
+.annotations-list-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .25rem;
+  border-bottom: 1px solid #ddd;
 }
 
-export interface Layout {
-  size: {
-    width: number
-    height: number
-    depth: number
-  }
-  objects: Object[]
+.annotations-list-controls .control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  padding: .1rem;
 }
 
-export interface Object {
-  id: string
-  name: string
-  pose: string
-  truncated: number
-  difficult: number
-  layout: LayoutObject
+.annotations-list-controls .control-btn:hover {
+  background-color: #e0e0e0;
 }
-
-export interface Bndbox {
-  type: "bndbox"
-  xmin: number
-  ymin: number
-  xmax: number
-  ymax: number
-}
-
-export interface Polygon {
-  type: "polygon"
-  points: {
-    x: number,
-    y: number
-  }[]
-}
-
-export type LayoutObject = Bndbox | Polygon

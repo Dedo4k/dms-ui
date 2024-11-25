@@ -13,13 +13,19 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
+import { Crop75, Polyline } from "@mui/icons-material"
 import { FC } from "react"
 
 export const EditorControls: FC = (props) => {
 
   return <>
     <div className={"editor-controls"}>
-      <button>Bndbox</button>
+      <div className={"control-btn"} title={"Bndbox"}>
+        <Crop75/>
+      </div>
+      <div className={"control-btn"} title={"Polygon"}>
+        <Polyline/>
+      </div>
     </div>
   </>
 }

@@ -15,15 +15,15 @@
 
 import { Download, InfoRounded, PlayArrow } from "@mui/icons-material"
 import { FC, useEffect } from "react"
-import "../styles/Datasets.css"
+import "../../styles/Datasets.css"
 import { useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
-import PageableTable, { Column } from "../components/table/PageableTable"
-import { usePagination } from "../hooks/PaginationHook"
-import { Dataset } from "../models/Dataset"
-import { downloadDataset } from "../services/DatasetApi"
-import { fetchDatasets } from "../services/DatasetService"
-import { RootState } from "../store/Store"
+import PageableTable, { Column } from "../../components/table/PageableTable"
+import { usePagination } from "../../hooks/PaginationHook"
+import { Dataset } from "../../models/Dataset"
+import { downloadDataset } from "../../services/DatasetApi"
+import { fetchDatasets } from "../../services/DatasetService"
+import { RootState } from "../../store/Store"
 
 export const Datasets: FC = () => {
   const datasets = useSelector((state: RootState) => state.datasetsState.datasets)

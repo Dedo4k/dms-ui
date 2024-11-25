@@ -30,3 +30,7 @@
 .annotations-list .annotation:hover {
   background-color: #e0e0e0;
 }
+
+.annotations-list .annotation.selected {
+  background-color: #e0e0e0;
+}

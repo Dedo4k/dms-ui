@@ -19,9 +19,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { Tree, TreeNode } from "../components/tree/Tree"
 import { usePagination } from "../hooks/PaginationHook"
-import { AnnotationsList } from "../layouts/AnnotationsList"
-import { AnnotationsView } from "../layouts/AnnotationsView"
-import { EditorControls } from "../layouts/EditorControls"
+import { AnnotationsList } from "../layouts/annotation-list/AnnotationsList"
+import { AnnotationsView } from "../layouts/annotation-view/AnnotationsView"
+import { EditorControls } from "../layouts/datasets/EditorControls"
 import { DataGroup } from "../models/DataGroup"
 import { setCurrent } from "../store/EditorStore"
 import { RootState, store } from "../store/Store"
@@ -114,11 +114,11 @@ export const DatasetEditor: FC = () => {
         <EditorControls/>
         <div className={"editor-view"}>
           <img src={editorState.annotation?.imageObjectUrl} alt={""} className={"annotation-img"}/>
-          <AnnotationsView annotation={editorState.annotation}/>
+          <AnnotationsView/>
         </div>
       </div>
       <div className={"annotations"}>
-        <AnnotationsList annotation={editorState.annotation}/>
+        <AnnotationsList/>
       </div>
     </div>
   </>

@@ -14,6 +14,7 @@
  */
 
 
+import { v1 as uuidv1 } from "uuid"
 import { Layout, LayoutObject, Object } from "../models/Annotation"
 
 export const parseLayoutFromXml = async (data: Blob): Promise<Layout> => {
@@ -51,6 +52,7 @@ export const parseLayoutFromXml = async (data: Blob): Promise<Layout> => {
                                         const bndboxElement = objectElement.querySelector("bndbox")
 
                                         return {
+                                          id: uuidv1(),
                                           name,
                                           pose,
                                           truncated,
