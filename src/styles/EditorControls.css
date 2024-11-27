@@ -1,0 +1,76 @@
+/*
+ * Copyright (c) 2024 Uladzislau Lailo.
+ *
+ * All rights reserved.
+ *
+ * This source code, and any associated documentation, is the intellectual property of Uladzislau Lailo.
+ * Unauthorized copying, modification, distribution, or any form of reuse of this code, in whole or in part,
+ * without explicit permission from the copyright holder is strictly prohibited, except where explicitly permitted
+ * under applicable open-source licenses (if any).
+ *
+ * Licensed use:
+ * If the code is provided under an open-source license, you must follow the terms of that license, which can be found in the LICENSE file.
+ * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
+ */
+
+.editor-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.editor-controls .control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  padding: .25rem;
+}
+
+.editor-controls .control-btn.active {
+  background-color: #e0e0e0;
+}
+
+.editor-controls .control-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.editor-controls .mode-control,
+.editor-controls .zoom-control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+}
+
+.editor-controls > .control-group:not(:first-child) {
+  border-left: 1px solid #ddd;
+}
+
+.editor-controls .zoom-control .zoom-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+}
+
+.editor-controls .zoom-control .zoom-input span {
+  font-size: 18px;
+}
+
+.editor-controls .zoom-control .zoom-input input::-webkit-outer-spin-button,
+.editor-controls .zoom-control .zoom-input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.editor-controls .zoom-control .zoom-input input {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
+  width: 40px;
+  text-align: center;
+}

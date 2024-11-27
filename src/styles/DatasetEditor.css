@@ -70,7 +70,7 @@
 
 .dataset-editor .editor .editor-view {
   position: relative;
-  height: calc(100% - 2rem);
+  height: calc(100% - 3rem);
   overflow: auto;
 }
 

@@ -14,6 +14,7 @@
  */
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { v1 as uuidv1 } from "uuid"
 import { Annotation, Object } from "../models/Annotation"
 import { DataGroup } from "../models/DataGroup"
 import { Dataset } from "../models/Dataset"
@@ -25,8 +26,20 @@ interface EditorState {
   current: DataGroup | null
   annotation: Annotation | null
   selectedObjects: Object[]
+  mode: EditorMode
+  drawingObject: Object | null
+  drawingStartPoint: {
+    x: number,
+    y: number
+  } | null,
+  zoom: number,
+  minZoom: number,
+  maxZoom: number,
+  zoomStep: number,
   status: "initial" | "loading" | "loaded" | "initialized" | "error"
 }
+
+export type EditorMode = "bndbox" | "polygon" | null
 
 const initialState: EditorState = {
   dataset: null,
@@ -34,6 +47,13 @@ const initialState: EditorState = {
   current: null,
   annotation: null,
   selectedObjects: [],
+  mode: null,
+  drawingObject: null,
+  drawingStartPoint: null,
+  zoom: 1,
+  minZoom: 0.05,
+  maxZoom: 2,
+  zoomStep: 0.05,
   status: "initial"
 }
 
@@ -85,6 +105,31 @@ export const editorStore = createSlice(
             state.selectedObjects.push(object)
           }
         }
+      },
+      setMode: (state: EditorState, action: PayloadAction<EditorMode>) => {
+        state.mode = action.payload
+      },
+      setDrawingObject: (state: EditorState, action: PayloadAction<Object | null>) => {
+        state.drawingObject = action.payload
+      },
+      addLayoutObject: (state: EditorState, action: PayloadAction<Object>) => {
+        state.annotation?.layout?.objects.push({
+                                                 ...action.payload,
+                                                 id: uuidv1()
+                                               })
+      },
+      setDrawingStartPoint: (
+        state: EditorState,
+        action: PayloadAction<{
+          x: number,
+          y: number
+        } | null>
+      ) => {
+        state.drawingStartPoint = action.payload
+      },
+      setZoom: (state: EditorState, action: PayloadAction<number>) => {
+        state.zoom = action.payload
+        console.log(action.payload)
       }
     },
     extraReducers: (builder) => {
@@ -135,7 +180,12 @@ export const {
   setCurrent,
   selectAllObjects,
   clearObjectSelection,
-  toggleObject
+  toggleObject,
+  setMode,
+  setDrawingObject,
+  addLayoutObject,
+  setDrawingStartPoint,
+  setZoom
 } = editorStore.actions
 
 export default editorStore.reducer

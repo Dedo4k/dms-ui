@@ -113,7 +113,10 @@ export const DatasetEditor: FC = () => {
       <div className={"editor"}>
         <EditorControls/>
         <div className={"editor-view"}>
-          <img src={editorState.annotation?.imageObjectUrl} alt={""} className={"annotation-img"}/>
+          <img src={editorState.annotation?.imageObjectUrl} alt={""} className={"annotation-img"} style={{
+            transform: `scale(${editorState.zoom})`,
+            transformOrigin: "top left"
+          }}/>
           <AnnotationsView/>
         </div>
       </div>
