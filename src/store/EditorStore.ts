@@ -115,7 +115,8 @@ export const editorStore = createSlice(
       addLayoutObject: (state: EditorState, action: PayloadAction<Object>) => {
         state.annotation?.layout?.objects.push({
                                                  ...action.payload,
-                                                 id: uuidv1()
+                                                 id: uuidv1(),
+                                                 name: "object"
                                                })
       },
       setDrawingStartPoint: (
