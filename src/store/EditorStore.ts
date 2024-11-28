@@ -16,13 +16,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { v1 as uuidv1 } from "uuid"
 import { Annotation, Object } from "../models/Annotation"
+import { Config } from "../models/Config"
 import { DataGroup } from "../models/DataGroup"
 import { Dataset } from "../models/Dataset"
-import { fetchAnnotation, fetchDataset, fetchDatasetGroups } from "./StoreActions"
+import { fetchAnnotation, fetchDataset, fetchDatasetConfig, fetchDatasetGroups } from "./StoreActions"
 
 interface EditorState {
   dataset: Dataset | null
   groups: DataGroup[]
+  config: Config | null | undefined
   current: DataGroup | null
   annotation: Annotation | null
   selectedObjects: Object[]
@@ -44,6 +46,7 @@ export type EditorMode = "bndbox" | "polygon" | null
 const initialState: EditorState = {
   dataset: null,
   groups: [],
+  config: undefined,
   current: null,
   annotation: null,
   selectedObjects: [],
@@ -130,7 +133,9 @@ export const editorStore = createSlice(
       },
       setZoom: (state: EditorState, action: PayloadAction<number>) => {
         state.zoom = action.payload
-        console.log(action.payload)
+      },
+      setConfig: (state: EditorState, action: PayloadAction<Config>) => {
+        state.config = action.payload
       }
     },
     extraReducers: (builder) => {
@@ -173,6 +178,12 @@ export const editorStore = createSlice(
           state.selectedObjects = []
           state.status = "loaded"
         })
+        .addCase(fetchDatasetConfig.fulfilled, (state, action) => {
+          state.config = action.payload
+        })
+        .addCase(fetchDatasetConfig.rejected, (state) => {
+          state.config = null
+        })
     }
   })
 
@@ -186,7 +197,8 @@ export const {
   setDrawingObject,
   addLayoutObject,
   setDrawingStartPoint,
-  setZoom
+  setZoom,
+  setConfig
 } = editorStore.actions
 
 export default editorStore.reducer

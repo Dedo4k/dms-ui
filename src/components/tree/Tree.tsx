@@ -14,15 +14,17 @@
  */
 
 import { ChevronRight, KeyboardArrowDown } from "@mui/icons-material"
-import React, { FC, ReactNode } from "react"
+import React, { FC, ReactNode, useState } from "react"
 import "../../styles/Tree.css"
 import { useExpandCollapse } from "../../hooks/ExpandCollapseHook"
+import { ContextMenu } from "../context-menu/ContextMenu"
 
 interface TreeProps {
   nodes: TreeNode[]
   onNodeClick: (node: TreeNode, nodeId: string) => void
   dataRenderer?: (node: any) => ReactNode
   isActive?: (node: TreeNode) => boolean
+  contextMenuRenderer?: (node: TreeNode) => ReactNode
 }
 
 export interface TreeNode {
@@ -35,13 +37,19 @@ export const Tree: FC<TreeProps> = (props: TreeProps) => {
     nodes,
     dataRenderer,
     onNodeClick,
-    isActive
+    isActive,
+    contextMenuRenderer
   } = props
   const {
     expand,
     collapse,
     isExpanded
   } = useExpandCollapse()
+  const [contextMenuTarget, setContextMenuTarget] = useState<TreeNode | null>(null)
+  const [menuPosition, setMenuPosition] = useState<{
+    x: number,
+    y: number
+  } | null>(null)
 
   const toggleExpandCollapse = (nodeId: string, e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
@@ -51,6 +59,26 @@ export const Tree: FC<TreeProps> = (props: TreeProps) => {
     } else {
       expand(nodeId)
     }
+  }
+
+  const toggleContextMenu = (node: TreeNode, nodeId: string, e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault()
+
+    const {
+      pageX,
+      pageY
+    } = e
+
+    setContextMenuTarget(node)
+    setMenuPosition({
+                      x: pageX,
+                      y: pageY
+                    })
+  }
+
+  const closeContextMenu = () => {
+    setContextMenuTarget(null)
+    setMenuPosition(null)
   }
 
   const handleOnNodeClick = (node: TreeNode, nodeId: string, e: React.MouseEvent<HTMLDivElement>) => {
@@ -63,7 +91,8 @@ export const Tree: FC<TreeProps> = (props: TreeProps) => {
     return <React.Fragment key={nodeId}>
       <div id={nodeId} className={"tree-node"}>
         <div className={`tree-node-data ${isExpanded(nodeId) ? "expanded" : "collapsed"} ${isActive && isActive(node) ? " active" : ""}`}
-             onClick={(e) => handleOnNodeClick(node, nodeId, e)}>
+             onClick={(e) => handleOnNodeClick(node, nodeId, e)}
+             onContextMenu={(e) => toggleContextMenu(node, nodeId, e)}>
           {
             node
               .children.length > 0 &&
@@ -99,6 +128,14 @@ export const Tree: FC<TreeProps> = (props: TreeProps) => {
     <div className="tree-container">
       {
         nodes.map((data, index) => renderNode(data, index.toString()))
+      }
+      {
+        contextMenuTarget && menuPosition &&
+          <ContextMenu position={menuPosition} onClose={closeContextMenu}>
+            {
+              contextMenuRenderer && contextMenuRenderer(contextMenuTarget)
+            }
+          </ContextMenu>
       }
     </div>
   </>

@@ -13,7 +13,7 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-import { FC, useEffect } from "react"
+import React, { FC, useEffect, useRef } from "react"
 import "../styles/DatasetEditor.css"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
@@ -21,14 +21,17 @@ import { Tree, TreeNode } from "../components/tree/Tree"
 import { usePagination } from "../hooks/PaginationHook"
 import { AnnotationsList } from "../layouts/annotation-list/AnnotationsList"
 import { AnnotationsView } from "../layouts/annotation-view/AnnotationsView"
+import { ConfigView } from "../layouts/config-view/ConfigView"
 import { EditorControls } from "../layouts/datasets/EditorControls"
 import { DataGroup } from "../models/DataGroup"
-import { setCurrent } from "../store/EditorStore"
+import { setCurrent, setZoom } from "../store/EditorStore"
 import { RootState, store } from "../store/Store"
-import { fetchAnnotation, fetchDataset, fetchDatasetGroups } from "../store/StoreActions"
+import { fetchAnnotation, fetchDataset, fetchDatasetConfig, fetchDatasetGroups } from "../store/StoreActions"
 
 export const DatasetEditor: FC = () => {
   const dispatch = useDispatch<typeof store.dispatch>()
+  const editorViewRef = useRef<HTMLDivElement>(null)
+  const imageRef = useRef<HTMLImageElement>(null)
 
   const {id} = useParams()
 
@@ -37,9 +40,9 @@ export const DatasetEditor: FC = () => {
   }
 
   const datasetId = Number.parseInt(id)
-
   const editorState = useSelector((state: RootState) => state.editorState)
   const pagination = usePagination({size: 20})
+  const zoomRef = useRef(editorState.zoom)
 
   const treeData: TreeNode[] = editorState.groups?.map(group => ({
     data: {
@@ -56,16 +59,31 @@ export const DatasetEditor: FC = () => {
   })) || []
 
   useEffect(() => {
+    if (editorViewRef.current) {
+      editorViewRef.current.addEventListener("wheel", (e) => handleMouseWheel(e), {passive: false})
+    }
+
     const loadData = async () => {
       const dataset = await dispatch(fetchDataset(datasetId)).unwrap()
-      await dispatch(fetchDatasetGroups({
+      dispatch(fetchDatasetGroups({
                                           datasetId: dataset.id,
                                           pagination
                                         }))
+      dispatch(fetchDatasetConfig(datasetId))
     }
 
     loadData()
+
+    return () => {
+      if (editorViewRef.current) {
+        editorViewRef.current.removeEventListener("wheel", handleMouseWheel)
+      }
+    }
   }, [])
+
+  useEffect(() => {
+    zoomRef.current = editorState.zoom
+  }, [editorState.zoom])
 
   useEffect(() => {
     dispatch(fetchAnnotation())
@@ -93,6 +111,38 @@ export const DatasetEditor: FC = () => {
     }
   }
 
+  const contextMenuRenderer = (node: TreeNode) => {
+    switch (node.data.type) {
+      case "group": {
+        return <>
+          <div className={"menu-action"}>New</div>
+          <div className={"menu-action"}>Delete</div>
+        </>
+      }
+      case "file": {
+
+        break
+      }
+    }
+  }
+
+  const handleMouseWheel = (e: WheelEvent) => {
+    if (e.ctrlKey) {
+      e.preventDefault()
+
+      if (editorViewRef.current) {
+        const {
+          deltaY
+        } = e
+
+        const delta = deltaY < 0 ? editorState.zoomStep : -editorState.zoomStep
+        const newZoom = Math.min(Math.max(editorState.minZoom, zoomRef.current + delta), editorState.maxZoom)
+
+        dispatch(setZoom(newZoom))
+      }
+    }
+  }
+
   return <>
     <div className="dataset-editor">
       <div className={"groups"}>
@@ -106,14 +156,22 @@ export const DatasetEditor: FC = () => {
         <div className="groups-list">
           {
             treeData &&
-              <Tree nodes={treeData} dataRenderer={nodeDataRenderer} onNodeClick={onNodeClick} isActive={isNodeActive}/>
+              <Tree nodes={treeData}
+                    dataRenderer={nodeDataRenderer}
+                    contextMenuRenderer={contextMenuRenderer}
+                    onNodeClick={onNodeClick}
+                    isActive={isNodeActive}/>
           }
         </div>
       </div>
       <div className={"editor"}>
         <EditorControls/>
-        <div className={"editor-view"}>
-          <img src={editorState.annotation?.imageObjectUrl} alt={""} className={"annotation-img"} style={{
+        <div id={"editorView"} ref={editorViewRef} className={"editor-view"}>
+          <img ref={imageRef}
+               src={editorState.annotation?.imageObjectUrl}
+               alt={""}
+               className={"annotation-img"}
+               style={{
             transform: `scale(${editorState.zoom})`,
             transformOrigin: "top left"
           }}/>
@@ -121,6 +179,7 @@ export const DatasetEditor: FC = () => {
         </div>
       </div>
       <div className={"annotations"}>
+        <ConfigView/>
         <AnnotationsList/>
       </div>
     </div>

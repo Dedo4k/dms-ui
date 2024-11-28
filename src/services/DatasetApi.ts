@@ -15,6 +15,7 @@
 
 import axios from "axios"
 import { Pagination } from "../hooks/PaginationHook"
+import { Config } from "../models/Config"
 import { DataGroup } from "../models/DataGroup"
 import { Dataset } from "../models/Dataset"
 import { store } from "../store/Store"
@@ -117,4 +118,12 @@ export const downloadDataset = async (datasetId: number) => {
 
   link.remove()
   URL.revokeObjectURL(blobUrl)
+}
+
+export const getConfig = async (datasetId: number): Promise<ApiResponse<Config>> => {
+  const response = await datasetApi.get(`/${datasetId}/config`)
+
+  return {
+    data: response.data
+  }
 }

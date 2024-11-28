@@ -44,9 +44,12 @@ export const AnnotationsListControls: FC = () => {
             }
           </div>
       }
-      <div className={"visibility-control control-btn"}>
-        <VisibilityOff/>
-      </div>
+      {
+        editorState?.annotation?.layout?.objects.length &&
+          <div className={"visibility-control control-btn"}>
+              <VisibilityOff/>
+          </div>
+      }
     </div>
   </>
 }
