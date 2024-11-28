@@ -26,6 +26,7 @@
   border-right: 1px solid #ddd;
   overflow: auto;
   padding: .25rem;
+  z-index: 10;
 }
 
 .dataset-editor .groups .dataset-info {
@@ -57,6 +58,7 @@
 .dataset-editor .editor {
   flex: 1;
   overflow: hidden;
+  z-index: 5;
 }
 
 .dataset-editor .editor .editor-controls {
@@ -77,4 +79,5 @@
 .dataset-editor .groups .groups-list {
   overflow: auto;
   flex: 1;
+  z-index: 10;
 }

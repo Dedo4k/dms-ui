@@ -16,10 +16,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { Pagination } from "../hooks/PaginationHook"
 import { Annotation } from "../models/Annotation"
+import { Config } from "../models/Config"
 import { DataGroup } from "../models/DataGroup"
 import { Dataset } from "../models/Dataset"
 import { parseLayoutFromXml } from "../services/AnnotationService"
-import { getDataset, getGroups } from "../services/DatasetApi"
+import { getConfig, getDataset, getGroups } from "../services/DatasetApi"
 import { RootState } from "./Store"
 
 export const fetchDataset = createAsyncThunk<Dataset, number>(
@@ -88,5 +89,14 @@ export const fetchAnnotation = createAsyncThunk<Annotation>(
       imageObjectUrl: imageBlob && URL.createObjectURL(imageBlob),
       layout
     }
+  }
+)
+
+export const fetchDatasetConfig = createAsyncThunk<Config, number>(
+  "fetchConfig",
+  async (datasetId: number) => {
+    const response = await getConfig(datasetId)
+
+    return response.data
   }
 )

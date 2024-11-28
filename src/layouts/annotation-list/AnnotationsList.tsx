@@ -49,6 +49,10 @@ export const AnnotationsList: FC<AnnotationsListProps> = (props: AnnotationsList
           </div>
         </React.Fragment>)
       }
+      {
+        !editorState?.annotation?.layout &&
+          <div className={"no-layout"}>No Layout</div>
+      }
     </div>
   </>
 }
