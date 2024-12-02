@@ -16,6 +16,7 @@
 import React, { FC } from "react"
 import "../../styles/AnnotationsList.css"
 import { useDispatch, useSelector } from "react-redux"
+import { Spinner } from "../../components/spinner/Spinner"
 import { Object } from "../../models/Annotation"
 import { toggleObject } from "../../store/EditorStore"
 import { RootState } from "../../store/Store"
@@ -40,6 +41,9 @@ export const AnnotationsList: FC<AnnotationsListProps> = (props: AnnotationsList
 
   return <>
     <div className="annotations-list">
+      {
+        editorState.annotationStatus === "loading" && <Spinner/>
+      }
       <AnnotationsListControls/>
       {
         editorState.annotation?.layout?.objects.map((object: Object, index: number) => <React.Fragment key={index}>
