@@ -38,7 +38,10 @@ interface EditorState {
   minZoom: number,
   maxZoom: number,
   zoomStep: number,
-  status: "initial" | "loading" | "loaded" | "initialized" | "error"
+  datasetStatus: "initial" | "loading" | "loaded" | "error",
+  groupsStatus: "initial" | "loading" | "loaded" | "error",
+  configStatus: "initial" | "loading" | "loaded" | "error",
+  annotationStatus: "initial" | "loading" | "loaded" | "error"
 }
 
 export type EditorMode = "bndbox" | "polygon" | null
@@ -57,7 +60,10 @@ const initialState: EditorState = {
   minZoom: 0.05,
   maxZoom: 2,
   zoomStep: 0.05,
-  status: "initial"
+  datasetStatus: "initial",
+  groupsStatus: "initial",
+  configStatus: "initial",
+  annotationStatus: "initial"
 }
 
 export const editorStore = createSlice(
@@ -141,17 +147,17 @@ export const editorStore = createSlice(
     extraReducers: (builder) => {
       builder
         .addCase(fetchDataset.pending, (state) => {
-          state.status = "loading"
+          state.datasetStatus = "loading"
         })
         .addCase(fetchDataset.fulfilled, (state, action) => {
           state.dataset = action.payload
-          state.status = "loaded"
+          state.datasetStatus = "loaded"
         })
         .addCase(fetchDataset.rejected, (state) => {
-          state.status = "error"
+          state.datasetStatus = "error"
         })
         .addCase(fetchDatasetGroups.pending, (state) => {
-          state.status = "loading"
+          state.groupsStatus = "loading"
         })
         .addCase(fetchDatasetGroups.fulfilled, (state, action) => {
           if (state.dataset) {
@@ -159,16 +165,16 @@ export const editorStore = createSlice(
             if (state.groups.length) {
               state.current = state.groups[0]
             }
-            state.status = "loaded"
+            state.groupsStatus = "loaded"
           } else {
-            state.status = "error"
+            state.datasetStatus = "error"
           }
         })
         .addCase(fetchDatasetGroups.rejected, (state) => {
-          state.status = "error"
+          state.groupsStatus = "error"
         })
         .addCase(fetchAnnotation.pending, (state) => {
-          state.status = "loading"
+          state.annotationStatus = "loading"
         })
         .addCase(fetchAnnotation.fulfilled, (state, action) => {
           if (state.annotation?.imageObjectUrl) {
@@ -176,13 +182,21 @@ export const editorStore = createSlice(
           }
           state.annotation = action.payload
           state.selectedObjects = []
-          state.status = "loaded"
+          state.annotationStatus = "loaded"
+        })
+        .addCase(fetchAnnotation.rejected, (state) => {
+          state.annotationStatus = "error"
+        })
+        .addCase(fetchDatasetConfig.pending, (state) => {
+          state.configStatus = "loading"
         })
         .addCase(fetchDatasetConfig.fulfilled, (state, action) => {
           state.config = action.payload
+          state.configStatus = "loaded"
         })
         .addCase(fetchDatasetConfig.rejected, (state) => {
           state.config = null
+          state.configStatus = "error"
         })
     }
   })

@@ -13,57 +13,47 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-.config-view {
+.appendable-select {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  border-bottom: 1px solid #ddd;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-height: 600px;
 }
 
-.config-view .config-container {
-  position: relative;
-  min-height: 4.5rem;
+.appendable-select .active-option {
+  height: 1rem;
+}
+
+.appendable-select .options-list {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: stretch;
+  width: fit-content;
 }
 
-.config-view .title {
-  font-size: 18px;
-  font-weight: 400;
-}
-
-.config-view .no-config {
-  margin-block: .5rem;
-}
-
-.config-view .no-config .add-config-btn {
+.appendable-select .options-list .option {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  padding: 1rem;
-  cursor: default;
+  justify-content: flex-start;
+  padding-inline: .5rem;
 }
 
-.config-view .no-config .add-config-btn:hover {
+.appendable-select .options-list .option:hover {
   background-color: #e0e0e0;
 }
 
-.config-view .config-container .annotation-class-view {
+.appendable-select .options-list .option .control-btn {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  gap: 1rem;
-  width: 100%;
+  justify-content: center;
+  border-radius: 5px;
+  padding: .25rem;
 }
 
-.config-view .config-container .annotation-class-view .active-option {
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  padding: 5px;
-  font-size: 16px;
-  text-align: center;
-  cursor: pointer;
+.appendable-select .options-list .option .control-btn:hover {
+  background-color: #797979;
 }

@@ -17,6 +17,7 @@ import React, { FC, useEffect, useRef } from "react"
 import "../styles/DatasetEditor.css"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
+import { Spinner } from "../components/spinner/Spinner"
 import { Tree, TreeNode } from "../components/tree/Tree"
 import { usePagination } from "../hooks/PaginationHook"
 import { AnnotationsList } from "../layouts/annotation-list/AnnotationsList"
@@ -59,24 +60,26 @@ export const DatasetEditor: FC = () => {
   })) || []
 
   useEffect(() => {
-    if (editorViewRef.current) {
-      editorViewRef.current.addEventListener("wheel", (e) => handleMouseWheel(e), {passive: false})
+    const current = editorViewRef.current
+
+    if (current) {
+      current.addEventListener("wheel", (e) => handleMouseWheel(e), {passive: false})
     }
 
     const loadData = async () => {
       const dataset = await dispatch(fetchDataset(datasetId)).unwrap()
       dispatch(fetchDatasetGroups({
-                                          datasetId: dataset.id,
-                                          pagination
-                                        }))
+                                    datasetId: dataset.id,
+                                    pagination
+                                  }))
       dispatch(fetchDatasetConfig(datasetId))
     }
 
     loadData()
 
     return () => {
-      if (editorViewRef.current) {
-        editorViewRef.current.removeEventListener("wheel", handleMouseWheel)
+      if (current) {
+        current.removeEventListener("wheel", handleMouseWheel)
       }
     }
   }, [])
@@ -145,15 +148,24 @@ export const DatasetEditor: FC = () => {
 
   return <>
     <div className="dataset-editor">
+      {
+        editorState.datasetStatus === "loading" && <Spinner/>
+      }
       <div className={"groups"}>
         <div className="dataset-info">
           <div className={"dataset-name"}>{editorState.dataset?.name}</div>
           <div className={"dataset-description"}>{editorState.dataset?.description}</div>
-          <div className="groups-info">
-            <div className={"total-groups"}>Groups: {editorState.groups.length} of {pagination?.totalElements}</div>
-          </div>
+          {
+            editorState.groupsStatus !== "initial" &&
+              <div className="groups-info">
+                  <div className={"total-groups"}>Groups: {editorState.groups.length} of {pagination?.totalElements}</div>
+              </div>
+          }
         </div>
         <div className="groups-list">
+          {
+            editorState.groupsStatus === "loading" && <Spinner/>
+          }
           {
             treeData &&
               <Tree nodes={treeData}
@@ -165,6 +177,9 @@ export const DatasetEditor: FC = () => {
         </div>
       </div>
       <div className={"editor"}>
+        {
+          editorState.annotationStatus === "loading" && <Spinner/>
+        }
         <EditorControls/>
         <div id={"editorView"} ref={editorViewRef} className={"editor-view"}>
           <img ref={imageRef}
@@ -172,9 +187,9 @@ export const DatasetEditor: FC = () => {
                alt={""}
                className={"annotation-img"}
                style={{
-            transform: `scale(${editorState.zoom})`,
-            transformOrigin: "top left"
-          }}/>
+                 transform: `scale(${editorState.zoom})`,
+                 transformOrigin: "top left"
+               }}/>
           <AnnotationsView/>
         </div>
       </div>
