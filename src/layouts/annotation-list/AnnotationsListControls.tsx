@@ -36,7 +36,7 @@ export const AnnotationsListControls: FC = () => {
     <div className={"annotations-list-controls"}>
       {
         editorState?.annotation?.layout?.objects.length &&
-          <div className={"selection-control control-btn"} onClick={toggleSelectionControl}>
+          <div className={"selection-control icon-btn control-btn"} onClick={toggleSelectionControl}>
             {
               editorState.selectedObjects.length === 0 ? <CheckBoxOutlineBlank/> :
                 editorState.selectedObjects.length === editorState?.annotation?.layout?.objects.length ?
@@ -46,7 +46,7 @@ export const AnnotationsListControls: FC = () => {
       }
       {
         editorState?.annotation?.layout?.objects.length &&
-          <div className={"visibility-control control-btn"}>
+          <div className={"visibility-control icon-btn control-btn"}>
               <VisibilityOff/>
           </div>
       }

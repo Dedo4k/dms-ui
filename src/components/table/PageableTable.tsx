@@ -105,17 +105,17 @@ const PageableTable: FC<PageableTableProps> = (props: PageableTableProps) => {
                   <div>entries</div>
               </div>
               <div className="pageable-controls">
-                  <button className={"page-btn"} onClick={handleFirstPage} disabled={page.number <= 0}>
+                  <button className={"icon-btn"} onClick={handleFirstPage} disabled={page.number <= 0}>
                       <FirstPageRounded fontSize={"medium"}/>
                   </button>
-                  <button className={"page-btn"} onClick={handlePrevPage} disabled={page.number <= 0}>
+                  <button className={"icon-btn"} onClick={handlePrevPage} disabled={page.number <= 0}>
                       <ChevronLeft/>
                   </button>
                   <div className={"pages"}>{page.number + 1} of {page.totalPages}</div>
-                  <button className={"page-btn"} onClick={handleNextPage} disabled={page.number >= page.totalPages - 1}>
+                  <button className={"icon-btn"} onClick={handleNextPage} disabled={page.number >= page.totalPages - 1}>
                       <ChevronRight/>
                   </button>
-                  <button className={"page-btn"} onClick={handleLastPage} disabled={page.number >= page.totalPages - 1}>
+                  <button className={"icon-btn"} onClick={handleLastPage} disabled={page.number >= page.totalPages - 1}>
                       <LastPageRounded/>
                   </button>
               </div>

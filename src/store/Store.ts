@@ -15,6 +15,7 @@
 
 import { configureStore } from "@reduxjs/toolkit"
 import userReducer from "./AuthStore"
+import configReducer from "./ConfigStore"
 import datasetsReducer from "./DatasetsStore"
 import editorReducer from "./EditorStore"
 
@@ -23,7 +24,8 @@ export const store = configureStore(
     reducer: {
       authState: userReducer,
       datasetsState: datasetsReducer,
-      editorState: editorReducer
+      editorState: editorReducer,
+      configStoreState: configReducer
     }
   }
 )

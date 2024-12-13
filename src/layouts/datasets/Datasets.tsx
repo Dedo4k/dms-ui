@@ -75,13 +75,13 @@ export const Datasets: FC = () => {
   const rowActionsRenderer = (value: any, row: Dataset, rowIndex: number) => {
     return <>
       <div className={"action-cell"}>
-        <Link to={`/editor/${row.id}`} title={"Go to editor"}>
+        <Link to={`/editor/${row.id}`} title={"Go to editor"} className={"icon-btn"}>
           <PlayArrow fontSize={"medium"}/>
         </Link>
-        <div title={"Download"} onClick={() => downloadDataset(row.id)}>
+        <div title={"Download"} onClick={() => downloadDataset(row.id)} className={"icon-btn"}>
           <Download fontSize={"medium"}/>
         </div>
-        <Link to={row.id.toString()}>
+        <Link to={row.id.toString()} className={"icon-btn"}>
           <InfoRounded fontSize={"medium"}/>
         </Link>
       </div>
