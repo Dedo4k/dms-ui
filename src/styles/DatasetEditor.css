@@ -65,12 +65,12 @@
 }
 
 .dataset-editor .editor .editor-controls {
-  height: 2rem;
+  height: 3rem;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  padding: .5rem;
+  gap: .25rem;
 }
 
 .dataset-editor .editor .editor-view {

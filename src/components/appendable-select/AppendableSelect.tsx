@@ -14,61 +14,99 @@
  */
 
 import { Add, Remove } from "@mui/icons-material"
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useState } from "react"
 import "../../styles/AppendableSelect.css"
 
 interface AppendableSelectProps {
   placeholder?: string
-  options: any[]
+  options: Option[]
+  activeOption: string | null
   optionRenderer: (option: any) => React.ReactNode
+  onSelect?: (option: Option) => void
+  onAdd?: (option: string) => void
+  onRemove?: (option: Option) => void
+}
+
+export interface Option {
+  data: any
+  editable: boolean
 }
 
 export const AppendableSelect: FC<AppendableSelectProps> = (props: AppendableSelectProps) => {
   const {
     placeholder,
     optionRenderer,
-    options
+    options,
+    activeOption,
+    onSelect,
+    onAdd,
+    onRemove
   } = props
 
-  const [activeOption, setActiveOption] = useState(options[0])
   const [expanded, setExpanded] = useState(false)
-
-  useEffect(() => {
-    setActiveOption(options[0])
-  }, [options])
+  const [newOption, setNewOption] = useState<string>("")
 
   const toggleActiveOption = () => {
     setExpanded(!expanded)
   }
 
+  const handleOptionClick = (option: Option) => {
+    onSelect && onSelect(option)
+  }
+
+  const handleOnInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewOption(event.currentTarget.value.trim())
+  }
+
+  const handleAddOption = () => {
+    if (newOption?.length) {
+      onAdd && onAdd(newOption)
+      setNewOption("")
+    }
+  }
+
+  const handleRemoveOption = (event: React.MouseEvent<HTMLDivElement>, option: Option) => {
+    event.stopPropagation()
+
+    onRemove && onRemove(option)
+  }
+
   return <>
     <div className={"appendable-select"}>
       <div className={"active-option"} onClick={toggleActiveOption}>
-        {
-          optionRenderer(activeOption)
-        }
+        {activeOption}
       </div>
       {
         expanded &&
-          <div className={"options-list"}>
-              <div className={"option add-new-option"}>
-                  <input type="text" placeholder={placeholder}/>
-                  <div className={"control-btn"} title={"Add"}>
-                      <Add/>
+          <>
+              <div className={"options-list-backdrop"} onClick={toggleActiveOption}/>
+              <div className={"options-list"}>
+                  <div className={"option add-new-option"}>
+                      <input type="text" placeholder={placeholder} value={newOption} onChange={handleOnInputChange}/>
+                      <div className={"icon-btn control-btn"} title={"Add"}>
+                          <Add onClick={handleAddOption}/>
+                      </div>
                   </div>
+                {
+                  options.map((option, index) =>
+                                <div key={index}
+                                     className={`option ${activeOption === option.data && "active"}`}
+                                     onClick={() => handleOptionClick(option)}>
+                                  {
+                                    optionRenderer(option)
+                                  }
+                                  {
+                                    option.editable &&
+                                      <div className={"icon-btn control-btn"}
+                                           title={"Remove"}
+                                           onClick={(e) => handleRemoveOption(e, option)}>
+                                          <Remove/>
+                                      </div>
+                                  }
+                                </div>)
+                }
               </div>
-            {
-              options.map((option, index) =>
-                            <div key={index} className={"option"}>
-                              {
-                                optionRenderer(option)
-                              }
-                              <div className={"control-btn"} title={"Remove"}>
-                                <Remove/>
-                              </div>
-                            </div>)
-            }
-          </div>
+          </>
       }
     </div>
   </>

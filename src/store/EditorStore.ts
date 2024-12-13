@@ -16,15 +16,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { v1 as uuidv1 } from "uuid"
 import { Annotation, Object } from "../models/Annotation"
-import { Config } from "../models/Config"
 import { DataGroup } from "../models/DataGroup"
 import { Dataset } from "../models/Dataset"
-import { fetchAnnotation, fetchDataset, fetchDatasetConfig, fetchDatasetGroups } from "./StoreActions"
+import { fetchAnnotation, fetchDataset, fetchDatasetGroups } from "./StoreActions"
 
 interface EditorState {
   dataset: Dataset | null
   groups: DataGroup[]
-  config: Config | null | undefined
   current: DataGroup | null
   annotation: Annotation | null
   selectedObjects: Object[]
@@ -40,7 +38,6 @@ interface EditorState {
   zoomStep: number,
   datasetStatus: "initial" | "loading" | "loaded" | "error",
   groupsStatus: "initial" | "loading" | "loaded" | "error",
-  configStatus: "initial" | "loading" | "loaded" | "error",
   annotationStatus: "initial" | "loading" | "loaded" | "error"
 }
 
@@ -49,7 +46,6 @@ export type EditorMode = "bndbox" | "polygon" | null
 const initialState: EditorState = {
   dataset: null,
   groups: [],
-  config: undefined,
   current: null,
   annotation: null,
   selectedObjects: [],
@@ -62,7 +58,6 @@ const initialState: EditorState = {
   zoomStep: 0.05,
   datasetStatus: "initial",
   groupsStatus: "initial",
-  configStatus: "initial",
   annotationStatus: "initial"
 }
 
@@ -124,8 +119,7 @@ export const editorStore = createSlice(
       addLayoutObject: (state: EditorState, action: PayloadAction<Object>) => {
         state.annotation?.layout?.objects.push({
                                                  ...action.payload,
-                                                 id: uuidv1(),
-                                                 name: "object"
+                                                 id: uuidv1()
                                                })
       },
       setDrawingStartPoint: (
@@ -139,9 +133,6 @@ export const editorStore = createSlice(
       },
       setZoom: (state: EditorState, action: PayloadAction<number>) => {
         state.zoom = action.payload
-      },
-      setConfig: (state: EditorState, action: PayloadAction<Config>) => {
-        state.config = action.payload
       }
     },
     extraReducers: (builder) => {
@@ -187,17 +178,6 @@ export const editorStore = createSlice(
         .addCase(fetchAnnotation.rejected, (state) => {
           state.annotationStatus = "error"
         })
-        .addCase(fetchDatasetConfig.pending, (state) => {
-          state.configStatus = "loading"
-        })
-        .addCase(fetchDatasetConfig.fulfilled, (state, action) => {
-          state.config = action.payload
-          state.configStatus = "loaded"
-        })
-        .addCase(fetchDatasetConfig.rejected, (state) => {
-          state.config = null
-          state.configStatus = "error"
-        })
     }
   })
 
@@ -211,8 +191,7 @@ export const {
   setDrawingObject,
   addLayoutObject,
   setDrawingStartPoint,
-  setZoom,
-  setConfig
+  setZoom
 } = editorStore.actions
 
 export default editorStore.reducer

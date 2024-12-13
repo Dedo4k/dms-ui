@@ -45,7 +45,7 @@ export const Workspace: FC = () => {
               <span>{user?.name} {user?.surname}</span>
             </NavLink>
           </div>
-          <div className={"more-btn"}>
+          <div className={"icon-btn more-btn"}>
             <MoreVert/>
           </div>
         </div>

@@ -19,12 +19,12 @@
   align-items: stretch;
   justify-content: flex-start;
   border-bottom: 1px solid #ddd;
+  padding: .25rem;
 }
 
 .config-view .config-container {
   position: relative;
   min-height: 4.5rem;
-  display: flex;
 }
 
 .config-view .title {
@@ -36,34 +36,14 @@
   margin-block: .5rem;
 }
 
-.config-view .no-config .add-config-btn {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  padding: 1rem;
-  cursor: default;
-}
-
-.config-view .no-config .add-config-btn:hover {
-  background-color: #e0e0e0;
-}
-
 .config-view .config-container .annotation-class-view {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 1rem;
-  width: 100%;
+  gap: .25rem;
 }
 
-.config-view .config-container .annotation-class-view .active-option {
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  padding: 5px;
-  font-size: 16px;
-  text-align: center;
-  cursor: pointer;
+.annotation-class-view .class-selector {
+  flex: 1;
 }

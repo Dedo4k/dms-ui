@@ -12,3 +12,94 @@
  * If the code is provided under an open-source license, you must follow the terms of that license, which can be found in the LICENSE file.
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
+
+:root {
+  --ui-hover-color: #e0e0e0;
+  --ui-border-color: #ddd;
+  --ui-disabled-color: #dcdcdc;
+  --font-size-base: 16px;
+  --spacing-base: 8px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #fff;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+  border: 1px solid var(--ui-border-color);
+  border-radius: .25rem;
+  padding: .25rem;
+}
+
+button {
+  background: none;
+  cursor: pointer;
+}
+
+input {
+  width: inherit;
+  height: inherit;
+}
+
+.btn,
+.icon-btn {
+  display: flex;
+  align-items: center;
+  padding: .25rem;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: .25rem;
+}
+
+.icon-btn {
+  justify-content: center;
+}
+
+.btn:hover:not(:disabled),
+.icon-btn:hover:not(:disabled) {
+  background-color: var(--ui-hover-color);
+}
+
+.btn:disabled,
+.icon-btn:disabled {
+  background-color: var(--ui-disabled-color);
+  cursor: default;
+}

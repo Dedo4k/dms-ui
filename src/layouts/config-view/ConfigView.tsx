@@ -16,32 +16,58 @@
 import { Add } from "@mui/icons-material"
 import { FC } from "react"
 import "../../styles/ConfigView.css"
-import { useSelector } from "react-redux"
-import { AppendableSelect } from "../../components/appendable-select/AppendableSelect"
+import { useDispatch, useSelector } from "react-redux"
+import { AppendableSelect, Option } from "../../components/appendable-select/AppendableSelect"
 import { Spinner } from "../../components/spinner/Spinner"
+import { addClass, removeClass, setActiveClass } from "../../store/ConfigStore"
 import { RootState } from "../../store/Store"
 
 export const ConfigView: FC = () => {
-  const editorState = useSelector((state: RootState) => state.editorState)
+  const dispatch = useDispatch()
+  const configStoreState = useSelector((state: RootState) => state.configStoreState)
 
-  const classOptions = editorState.config?.classes || []
+  const defaultClassOptions = configStoreState.defaultConfig?.classes || []
+  const customClassOptions = configStoreState.customConfig.classes
 
-  const optionRenderer = (option: string) => option
+  const options = [
+    ...defaultClassOptions.map(option => ({
+      data: option,
+      editable: false
+    } as Option)),
+    ...customClassOptions.map(option => ({
+      data: option,
+      editable: true
+    } as Option))
+  ]
+
+  const optionRenderer = (option: Option) => option?.data
+
+  const handleOptionSelect = (option: Option) => {
+    dispatch(setActiveClass(option.data))
+  }
+
+  const handleAddOption = (option: string) => {
+    dispatch(addClass(option))
+  }
+
+  const handleRemoveOption = (option: Option) => {
+    dispatch(removeClass(option.data))
+  }
 
   return <>
     <div className={"config-view"}>
       <div className={"title"}>Dataset config</div>
       <div className={"config-container"}>
         {
-          editorState.configStatus === "loading" && <Spinner/>
+          configStoreState.status === "loading" && <Spinner/>
         }
         {
-          editorState.config === null &&
+          configStoreState.defaultConfig === null &&
             <div className={"no-config"}>
               {
                 //TODO for dataset owner
                 false ?
-                  <div className={"add-config-btn"}>
+                  <div className={"btn add-config-btn"}>
                     <Add/>
                     Add Config
                   </div>
@@ -53,7 +79,13 @@ export const ConfigView: FC = () => {
         <div className={"annotation-class-view"}>
           <div className={"classes"}>Class:</div>
           <div className={"class-selector"}>
-            <AppendableSelect options={classOptions} optionRenderer={optionRenderer} placeholder={"New Class"}/>
+            <AppendableSelect options={options}
+                              activeOption={configStoreState.activeClass}
+                              optionRenderer={optionRenderer}
+                              placeholder={"New Class"}
+                              onSelect={handleOptionSelect}
+                              onAdd={handleAddOption}
+                              onRemove={handleRemoveOption}/>
           </div>
         </div>
       </div>

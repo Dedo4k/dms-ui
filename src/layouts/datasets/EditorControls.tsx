@@ -75,19 +75,19 @@ export const EditorControls: FC = (props) => {
   return <>
     <div className={"editor-controls"}>
       <div className="control-group mode-control">
-        <div className={`control-btn ${editorState.mode === "bndbox" && "active"}`}
+        <div className={`icon-btn control-btn ${editorState.mode === "bndbox" && "active"}`}
              title={"Bndbox"}
              onClick={() => toggleMode("bndbox")}>
           <Crop75/>
         </div>
-        <div className={`control-btn ${editorState.mode === "polygon" && "active"}`}
+        <div className={`icon-btn control-btn ${editorState.mode === "polygon" && "active"}`}
              title={"Polygon"}
              onClick={() => toggleMode("polygon")}>
           <Polyline/>
         </div>
       </div>
       <div className={"control-group zoom-control"}>
-        <div className={"control-btn"} title={"Zoom out"} onClick={() => handleZoomOut()}>
+        <div className={"icon-btn control-btn"} title={"Zoom out"} onClick={() => handleZoomOut()}>
           <Remove/>
         </div>
         <div className={"zoom-input"}>
@@ -100,7 +100,7 @@ export const EditorControls: FC = (props) => {
                  max={editorState.maxZoom * 100}/>
           <span>%</span>
         </div>
-        <div className={"control-btn"} title={"Zoom in"} onClick={() => handleZoomIn()}>
+        <div className={"icon-btn control-btn"} title={"Zoom in"} onClick={() => handleZoomIn()}>
           <Add/>
         </div>
       </div>

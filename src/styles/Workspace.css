@@ -64,17 +64,6 @@
   flex: 1;
 }
 
-.sidebar .bottom-section .more-btn {
-  display: flex;
-  align-items: center;
-  border-radius: 5px;
-  padding: .25rem;
-}
-
-.sidebar .bottom-section .more-btn:hover {
-  background-color: #e0e0e0;
-}
-
 .main-content {
   flex: 1;
   width: calc(100vw - 250px);

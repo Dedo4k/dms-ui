@@ -28,6 +28,7 @@ interface AnnotationsViewProps {
 export const AnnotationsView: FC<AnnotationsViewProps> = (props: AnnotationsViewProps) => {
   const dispatch = useDispatch()
   const editorState = useSelector((state: RootState) => state.editorState)
+  const configStoreState = useSelector((state: RootState) => state.configStoreState)
   const editorViewRef = React.createRef<HTMLDivElement>()
 
   const handleObjectClick = (object: Object, e: React.MouseEvent<HTMLDivElement>) => {
@@ -126,8 +127,11 @@ export const AnnotationsView: FC<AnnotationsViewProps> = (props: AnnotationsView
           break
         }
         case "bndbox": {
-          if (layout.ymin !== layout.ymax && layout.xmin !== layout.xmax) {
-            dispatch(addLayoutObject(drawingObject))
+          if (layout.ymin !== layout.ymax && layout.xmin !== layout.xmax && configStoreState.activeClass) {
+            dispatch(addLayoutObject({
+                                       ...drawingObject,
+                                       name: configStoreState.activeClass
+                                     }))
           }
           break
         }
