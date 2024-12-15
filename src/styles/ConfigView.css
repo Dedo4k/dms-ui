@@ -24,7 +24,6 @@
 
 .config-view .config-container {
   position: relative;
-  min-height: 4.5rem;
 }
 
 .config-view .title {

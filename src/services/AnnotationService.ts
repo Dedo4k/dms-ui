@@ -17,7 +17,7 @@
 import { v1 as uuidv1 } from "uuid"
 import { Layout, LayoutObject, Object } from "../models/Annotation"
 
-export const parseLayoutFromXml = async (data: Blob): Promise<Layout> => {
+export const XmlToLayout = async (data: Blob): Promise<Layout> => {
   const xmlString = await data.text()
 
   const xml = new DOMParser().parseFromString(xmlString, "application/xml")
@@ -72,4 +72,53 @@ export const parseLayoutFromXml = async (data: Blob): Promise<Layout> => {
     size,
     objects
   }
+}
+
+export const LayoutToXml = (layout: Layout): string => {
+  const doc = document.implementation.createDocument(null, "annotation")
+  const root = doc.documentElement
+
+  const createElement = (name: string, text?: string) => {
+    const elem = doc.createElement(name)
+    if (text) elem.textContent = text
+    return elem
+  }
+
+  const size = createElement("size")
+  size.appendChild(createElement("width", layout.size.width.toString()))
+  size.appendChild(createElement("height", layout.size.height.toString()))
+  size.appendChild(createElement("depth", layout.size.depth.toString()))
+  root.appendChild(size)
+
+  layout.objects.forEach((obj) => {
+    const objectNode = createElement("object")
+    objectNode.appendChild(createElement("name", obj.name))
+    objectNode.appendChild(createElement("pose", obj.pose || "Unspecified"))
+    objectNode.appendChild(createElement("truncated", obj.truncated?.toString() || "0"))
+    objectNode.appendChild(createElement("difficult", obj.difficult?.toString() || "0"))
+
+    if (obj.layout.type === "bndbox") {
+      const bndbox = createElement("bndbox")
+      bndbox.appendChild(createElement("xmin", obj.layout.xmin.toString()))
+      bndbox.appendChild(createElement("ymin", obj.layout.ymin.toString()))
+      bndbox.appendChild(createElement("xmax", obj.layout.xmax.toString()))
+      bndbox.appendChild(createElement("ymax", obj.layout.ymax.toString()))
+      objectNode.appendChild(bndbox)
+    } else if (obj.layout.type === "polygon") {
+      const polygon = createElement("polygon")
+      obj.layout.points.forEach((point) => {
+        const pointNode = createElement("point")
+        pointNode.appendChild(createElement("x", point.x.toString()))
+        pointNode.appendChild(createElement("y", point.y.toString()))
+        polygon.appendChild(pointNode)
+      })
+      objectNode.appendChild(polygon)
+    }
+
+    root.appendChild(objectNode)
+  })
+
+  const serializer = new XMLSerializer()
+
+  return serializer.serializeToString(doc)
 }
