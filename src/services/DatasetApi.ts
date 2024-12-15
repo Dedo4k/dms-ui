@@ -127,3 +127,16 @@ export const getConfig = async (datasetId: number): Promise<ApiResponse<Config>>
     data: response.data
   }
 }
+
+export const uploadAnnotation = async (datasetId: number, groupId: number, fileId: number, annotation: string) => {
+  const formData = new FormData()
+  const blob = new Blob([annotation], {type: "application/xml"})
+
+  formData.append("file", blob)
+
+  const response = await datasetApi.put(`/${datasetId}/groups/${groupId}/files/${fileId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  })
+}

@@ -19,7 +19,7 @@ import { Annotation } from "../models/Annotation"
 import { Config } from "../models/Config"
 import { DataGroup } from "../models/DataGroup"
 import { Dataset } from "../models/Dataset"
-import { parseLayoutFromXml } from "../services/AnnotationService"
+import { XmlToLayout } from "../services/AnnotationService"
 import { getConfig, getDataset, getGroups } from "../services/DatasetApi"
 import { RootState } from "./Store"
 
@@ -80,7 +80,7 @@ export const fetchAnnotation = createAsyncThunk<Annotation>(
     let layout
 
     try {
-      layout = layoutBlob && await parseLayoutFromXml(layoutBlob)
+      layout = layoutBlob && await XmlToLayout(layoutBlob)
     } catch (e) {
 
     }

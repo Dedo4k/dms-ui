@@ -25,6 +25,8 @@ import { AnnotationsView } from "../layouts/annotation-view/AnnotationsView"
 import { ConfigView } from "../layouts/config-view/ConfigView"
 import { EditorControls } from "../layouts/datasets/EditorControls"
 import { DataGroup } from "../models/DataGroup"
+import { LayoutToXml } from "../services/AnnotationService"
+import { uploadAnnotation } from "../services/DatasetApi"
 import { setCurrent, setZoom } from "../store/EditorStore"
 import { RootState, store } from "../store/Store"
 import { fetchAnnotation, fetchDataset, fetchDatasetConfig, fetchDatasetGroups } from "../store/StoreActions"
@@ -92,10 +94,19 @@ export const DatasetEditor: FC = () => {
     dispatch(fetchAnnotation())
   }, [editorState.current])
 
-  const onNodeClick = (node: TreeNode, nodeId: string) => {
+  const onNodeClick = async (node: TreeNode, nodeId: string) => {
     const data = node.data
+
     if (data.type === "group") {
       const group = data as DataGroup
+      if (editorState.current && editorState.annotation?.layout && editorState.annotationStatus === "changed") {
+        await uploadAnnotation(
+          datasetId,
+          editorState.current.id,
+          editorState.current.files.find(file => file.fileName.includes(".xml"))!.id,
+          LayoutToXml(editorState.annotation.layout)
+        )
+      }
       dispatch(setCurrent(group.id))
     } else if (data.type === "file") {
 

@@ -38,7 +38,7 @@ interface EditorState {
   zoomStep: number,
   datasetStatus: "initial" | "loading" | "loaded" | "error",
   groupsStatus: "initial" | "loading" | "loaded" | "error",
-  annotationStatus: "initial" | "loading" | "loaded" | "error"
+  annotationStatus: "initial" | "loading" | "loaded" | "error" | "changed"
 }
 
 export type EditorMode = "bndbox" | "polygon" | null
@@ -121,6 +121,7 @@ export const editorStore = createSlice(
                                                  ...action.payload,
                                                  id: uuidv1()
                                                })
+        state.annotationStatus = "changed"
       },
       setDrawingStartPoint: (
         state: EditorState,
@@ -173,7 +174,7 @@ export const editorStore = createSlice(
           }
           state.annotation = action.payload
           state.selectedObjects = []
-          state.annotationStatus = "loaded"
+          state.annotationStatus = "initial"
         })
         .addCase(fetchAnnotation.rejected, (state) => {
           state.annotationStatus = "error"
