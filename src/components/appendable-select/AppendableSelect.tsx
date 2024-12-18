@@ -97,7 +97,7 @@ export const AppendableSelect: FC<AppendableSelectProps> = (props: AppendableSel
                                   }
                                   {
                                     option.editable &&
-                                      <div className={"icon-btn control-btn"}
+                                      <div className={"icon-btn control-btn remove-btn"}
                                            title={"Remove"}
                                            onClick={(e) => handleRemoveOption(e, option)}>
                                           <Remove/>

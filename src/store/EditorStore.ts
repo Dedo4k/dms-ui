@@ -26,18 +26,19 @@ interface EditorState {
   current: DataGroup | null
   annotation: Annotation | null
   selectedObjects: Object[]
+  invisibleObjects: Object[]
   mode: EditorMode
   drawingObject: Object | null
   drawingStartPoint: {
     x: number,
     y: number
-  } | null,
-  zoom: number,
-  minZoom: number,
-  maxZoom: number,
-  zoomStep: number,
-  datasetStatus: "initial" | "loading" | "loaded" | "error",
-  groupsStatus: "initial" | "loading" | "loaded" | "error",
+  } | null
+  zoom: number
+  minZoom: number
+  maxZoom: number
+  zoomStep: number
+  datasetStatus: "initial" | "loading" | "loaded" | "error"
+  groupsStatus: "initial" | "loading" | "loaded" | "error"
   annotationStatus: "initial" | "loading" | "loaded" | "error" | "changed"
 }
 
@@ -49,6 +50,7 @@ const initialState: EditorState = {
   current: null,
   annotation: null,
   selectedObjects: [],
+  invisibleObjects: [],
   mode: null,
   drawingObject: null,
   drawingStartPoint: null,
@@ -123,6 +125,15 @@ export const editorStore = createSlice(
                                                })
         state.annotationStatus = "changed"
       },
+      removeLayoutObjects: (state: EditorState, action: PayloadAction<Object[]>) => {
+        if (state.annotation?.layout) {
+          state.annotation.layout.objects = state.annotation.layout.objects
+                                                 .filter(object => !action.payload
+                                                                          .map(obj => obj.id)
+                                                                          .includes(object.id)
+                                                 )
+        }
+      },
       setDrawingStartPoint: (
         state: EditorState,
         action: PayloadAction<{
@@ -134,6 +145,19 @@ export const editorStore = createSlice(
       },
       setZoom: (state: EditorState, action: PayloadAction<number>) => {
         state.zoom = action.payload
+      },
+      toggleObjectVisibility: (state: EditorState, action: PayloadAction<Object>) => {
+        if (state.invisibleObjects.find(obj => obj.id === action.payload.id)) {
+          state.invisibleObjects = state.invisibleObjects.filter(obj => obj.id !== action.payload.id)
+        } else {
+          state.invisibleObjects.push(action.payload)
+        }
+      },
+      showAllObjects: (state: EditorState) => {
+        state.invisibleObjects = state.annotation?.layout?.objects || []
+      },
+      hideAllObjects: (state: EditorState) => {
+        state.invisibleObjects = []
       }
     },
     extraReducers: (builder) => {
@@ -191,8 +215,12 @@ export const {
   setMode,
   setDrawingObject,
   addLayoutObject,
+  removeLayoutObjects,
   setDrawingStartPoint,
-  setZoom
+  setZoom,
+  toggleObjectVisibility,
+  showAllObjects,
+  hideAllObjects
 } = editorStore.actions
 
 export default editorStore.reducer

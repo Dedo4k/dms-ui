@@ -16,6 +16,8 @@
 .annotations-list {
   display: flex;
   flex-direction: column;
+  outline: none;
+  gap: 1px;
 }
 
 .annotations-list .annotation {
@@ -25,6 +27,8 @@
   padding: .25rem;
   border-radius: 5px;
   cursor: pointer;
+  height: 2.2rem;
+  gap: .5rem;
 }
 
 .annotations-list .annotation:hover {
@@ -33,4 +37,18 @@
 
 .annotations-list .annotation.selected {
   background-color: #e0e0e0;
+}
+
+.annotations-list .annotation .remove-btn {
+  display: none;
+}
+
+.annotations-list .annotation:hover .remove-btn {
+  display: inherit;
+  margin-left: auto;
+}
+
+.annotations-list .annotation .visibility-btn:hover,
+.annotations-list .annotation .remove-btn:hover {
+  background-color: #797979;
 }

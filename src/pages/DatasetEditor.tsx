@@ -24,10 +24,11 @@ import { AnnotationsList } from "../layouts/annotation-list/AnnotationsList"
 import { AnnotationsView } from "../layouts/annotation-view/AnnotationsView"
 import { ConfigView } from "../layouts/config-view/ConfigView"
 import { EditorControls } from "../layouts/datasets/EditorControls"
+import { Object } from "../models/Annotation"
 import { DataGroup } from "../models/DataGroup"
 import { LayoutToXml } from "../services/AnnotationService"
 import { uploadAnnotation } from "../services/DatasetApi"
-import { setCurrent, setZoom } from "../store/EditorStore"
+import { removeLayoutObjects, setCurrent, setZoom } from "../store/EditorStore"
 import { RootState, store } from "../store/Store"
 import { fetchAnnotation, fetchDataset, fetchDatasetConfig, fetchDatasetGroups } from "../store/StoreActions"
 
@@ -157,6 +158,14 @@ export const DatasetEditor: FC = () => {
     }
   }
 
+  const handleObjectsDeletion = (object?: Object) => {
+    if (object) {
+      dispatch(removeLayoutObjects([object]))
+    } else if (editorState.selectedObjects.length) {
+      dispatch(removeLayoutObjects(editorState.selectedObjects))
+    }
+  }
+
   return <>
     <div className="dataset-editor">
       {
@@ -201,12 +210,12 @@ export const DatasetEditor: FC = () => {
                  transform: `scale(${editorState.zoom})`,
                  transformOrigin: "top left"
                }}/>
-          <AnnotationsView/>
+          <AnnotationsView onObjectDelete={handleObjectsDeletion}/>
         </div>
       </div>
       <div className={"annotations"}>
         <ConfigView/>
-        <AnnotationsList/>
+        <AnnotationsList onObjectDelete={handleObjectsDeletion}/>
       </div>
     </div>
   </>
