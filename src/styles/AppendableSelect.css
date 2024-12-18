@@ -74,6 +74,14 @@
   background-color: #797979;
 }
 
+.appendable-select .options-list .option .remove-btn {
+  display: none;
+}
+
+.appendable-select .options-list .option:hover .remove-btn {
+  display: inherit;
+}
+
 .appendable-select .options-list-backdrop {
   position: fixed;
   left: 0;

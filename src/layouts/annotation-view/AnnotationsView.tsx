@@ -23,6 +23,7 @@ import {
 import { RootState } from "../../store/Store"
 
 interface AnnotationsViewProps {
+  onObjectDelete: () => void
 }
 
 export const AnnotationsView: FC<AnnotationsViewProps> = (props: AnnotationsViewProps) => {
@@ -30,6 +31,8 @@ export const AnnotationsView: FC<AnnotationsViewProps> = (props: AnnotationsView
   const editorState = useSelector((state: RootState) => state.editorState)
   const configStoreState = useSelector((state: RootState) => state.configStoreState)
   const editorViewRef = React.createRef<HTMLDivElement>()
+
+  const {onObjectDelete} = props
 
   const handleObjectClick = (object: Object, e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
@@ -45,6 +48,8 @@ export const AnnotationsView: FC<AnnotationsViewProps> = (props: AnnotationsView
     e.preventDefault()
 
     if (editorViewRef.current) {
+      editorViewRef.current.focus()
+
       const {
         clientX,
         clientY
@@ -142,12 +147,23 @@ export const AnnotationsView: FC<AnnotationsViewProps> = (props: AnnotationsView
     dispatch(setDrawingStartPoint(null))
   }
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    switch (e.key) {
+      case "Delete": {
+        onObjectDelete && onObjectDelete()
+        break
+      }
+    }
+  }
+
   const renderLayoutObject = (object: Object, id: string) => {
-    switch (object.layout.type) {
-      case "polygon":
-        return renderPolygon(object, id)
-      case "bndbox":
-        return renderBndbox(object, id)
+    if (!editorState.invisibleObjects.find(obj => obj.id === object.id)) {
+      switch (object.layout.type) {
+        case "polygon":
+          return renderPolygon(object, id)
+        case "bndbox":
+          return renderBndbox(object, id)
+      }
     }
   }
 
@@ -184,9 +200,11 @@ export const AnnotationsView: FC<AnnotationsViewProps> = (props: AnnotationsView
   return <>
     <div ref={editorViewRef}
          className="annotations-view"
-         onMouseDown={(e) => handleMouseDown(e)}
-         onMouseMove={(e) => handleMouseMove(e)}
-         onMouseUp={(e) => handleMouseUp(e)}
+         onMouseDown={handleMouseDown}
+         onMouseMove={handleMouseMove}
+         onMouseUp={handleMouseUp}
+         onKeyDown={handleKeyPress}
+         tabIndex={0}
          style={{
            width: `${(editorState?.annotation?.layout?.size.width! * editorState.zoom)}px`,
            height: `${editorState?.annotation?.layout?.size.height! * editorState.zoom}px`,

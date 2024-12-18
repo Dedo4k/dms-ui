@@ -15,6 +15,7 @@
 
 
 import { v1 as uuidv1 } from "uuid"
+import formatXml from "xml-formatter"
 import { Layout, LayoutObject, Object } from "../models/Annotation"
 
 export const XmlToLayout = async (data: Blob): Promise<Layout> => {
@@ -120,5 +121,5 @@ export const LayoutToXml = (layout: Layout): string => {
 
   const serializer = new XMLSerializer()
 
-  return serializer.serializeToString(doc)
+  return formatXml(serializer.serializeToString(doc), {collapseContent: true})
 }
