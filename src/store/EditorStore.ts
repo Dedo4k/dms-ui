@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Uladzislau Lailo.
+ * Copyright (c) 2024-2025 Uladzislau Lailo.
  *
  * All rights reserved.
  *
@@ -33,6 +33,10 @@ interface EditorState {
     x: number,
     y: number
   } | null
+  movingStartPoint: {
+    x: number,
+    y: number
+  } | null
   zoom: number
   minZoom: number
   maxZoom: number
@@ -54,6 +58,7 @@ const initialState: EditorState = {
   mode: null,
   drawingObject: null,
   drawingStartPoint: null,
+  movingStartPoint: null,
   zoom: 1,
   minZoom: 0.05,
   maxZoom: 2,
@@ -158,6 +163,15 @@ export const editorStore = createSlice(
       },
       hideAllObjects: (state: EditorState) => {
         state.invisibleObjects = []
+      },
+      setMovingStartPoint: (
+        state: EditorState,
+        action: PayloadAction<{
+          x: number,
+          y: number
+        } | null>
+      ) => {
+        state.movingStartPoint = action.payload
       }
     },
     extraReducers: (builder) => {
@@ -220,7 +234,8 @@ export const {
   setZoom,
   toggleObjectVisibility,
   showAllObjects,
-  hideAllObjects
+  hideAllObjects,
+  setMovingStartPoint
 } = editorStore.actions
 
 export default editorStore.reducer

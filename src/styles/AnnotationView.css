@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Uladzislau Lailo.
+ * Copyright (c) 2024-2025 Uladzislau Lailo.
  *
  * All rights reserved.
  *
@@ -19,5 +19,77 @@
   left: 0;
 }
 
+.annotations-view .classname {
+  position: absolute;
+}
+
 .annotations-view .bndbox {
+}
+
+.resizer {
+  position: absolute;
+}
+
+.resizer.resizer-top,
+.resizer.resizer-top-left,
+.resizer.resizer-top-right,
+.resizer.resizer-bottom,
+.resizer.resizer-bottom-left,
+.resizer.resizer-bottom-right {
+  height: 2px;
+}
+
+.resizer.resizer-left,
+.resizer.resizer-top-left,
+.resizer.resizer-bottom-left,
+.resizer.resizer-right,
+.resizer.resizer-top-right,
+.resizer.resizer-bottom-right {
+  width: 2px;
+}
+
+.resizer.resizer-top,
+.resizer.resizer-bottom {
+  width: 100%;
+  cursor: ns-resize;
+}
+
+.resizer.resizer-left,
+.resizer.resizer-right {
+  height: 100%;
+  cursor: ew-resize;
+}
+
+.resizer.resizer-top-left,
+.resizer.resizer-bottom-right {
+  cursor: nw-resize;
+}
+
+.resizer.resizer-top-right,
+.resizer.resizer-bottom-left {
+  cursor: ne-resize;
+}
+
+.resizer.resizer-top,
+.resizer.resizer-top-left,
+.resizer.resizer-top-right {
+  top: -2px;
+}
+
+.resizer.resizer-bottom,
+.resizer.resizer-bottom-left,
+.resizer.resizer-bottom-right {
+  bottom: -2px;
+}
+
+.resizer.resizer-left,
+.resizer.resizer-top-left,
+.resizer.resizer-bottom-left {
+  left: -2px;
+}
+
+.resizer.resizer-right,
+.resizer.resizer-top-right,
+.resizer.resizer-bottom-right {
+  right: -2px;
 }

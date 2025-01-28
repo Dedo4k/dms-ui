@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Uladzislau Lailo.
+ * Copyright (c) 2024-2025 Uladzislau Lailo.
  *
  * All rights reserved.
  *
@@ -22,7 +22,7 @@ import { ContextMenu } from "../context-menu/ContextMenu"
 interface TreeProps {
   nodes: TreeNode[]
   onNodeClick: (node: TreeNode, nodeId: string) => void
-  dataRenderer?: (node: any) => ReactNode
+  dataRenderer?: (data: any) => ReactNode
   isActive?: (node: TreeNode) => boolean
   contextMenuRenderer?: (node: TreeNode) => ReactNode
 }

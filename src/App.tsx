@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Uladzislau Lailo.
+ * Copyright (c) 2024-2025 Uladzislau Lailo.
  *
  * All rights reserved.
  *
@@ -18,6 +18,7 @@ import "./styles/App.css"
 import { Route, Routes } from "react-router-dom"
 import { Datasets } from "./layouts/datasets/Datasets"
 import { DatasetEditor } from "./pages/DatasetEditor"
+import { WindowPage } from "./pages/WindowPage"
 import { Workspace } from "./pages/Workspace"
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path={"/workspace/moderators"} element={<div>Moderators</div>}/>
         </Route>
         <Route path={"/editor/:id"} element={<DatasetEditor/>}/>
+        <Route path={"/window"} element={<WindowPage/>}/>
       </Routes>
     </div>
   )

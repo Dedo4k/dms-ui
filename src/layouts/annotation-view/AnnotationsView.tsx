@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Uladzislau Lailo.
+ * Copyright (c) 2024-2025 Uladzislau Lailo.
  *
  * All rights reserved.
  *
@@ -183,7 +183,15 @@ export const AnnotationsView: FC<AnnotationsViewProps> = (props: AnnotationsView
              boxSizing: "border-box",
              cursor: `${editorState.mode && editorState.drawingObject ? "crosshair" : "pointer"}`
            }}>
-        <div>{object.name}</div>
+        <div className={"classname"}>{object.name}</div>
+        <div className={"resizer resizer-top"}/>
+        <div className={"resizer resizer-top-right"}/>
+        <div className={"resizer resizer-right"}/>
+        <div className={"resizer resizer-bottom-right"}/>
+        <div className={"resizer resizer-bottom"}/>
+        <div className={"resizer resizer-bottom-left"}/>
+        <div className={"resizer resizer-left"}/>
+        <div className={"resizer resizer-top-left"}/>
       </div>
     </React.Fragment>
   }

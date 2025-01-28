@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Uladzislau Lailo.
+ * Copyright (c) 2024-2025 Uladzislau Lailo.
  *
  * All rights reserved.
  *
@@ -13,7 +13,7 @@
  * For any permissions not covered by the license or any inquiries about usage, please contact: [lailo.vlad@gmail.com]
  */
 
-import { AccountCircle, Dataset, MoreVert, People } from "@mui/icons-material"
+import { AccountCircle, Dataset, DesktopWindows, MoreVert, People } from "@mui/icons-material"
 import { FC } from "react"
 import "../styles/Workspace.css"
 import { useSelector } from "react-redux"
@@ -36,6 +36,12 @@ export const Workspace: FC = () => {
           <NavLink to={"moderators"} title={"Moderators"}>
             <People/>
             <span>Moderators</span>
+          </NavLink>
+        </div>
+        <div className={"sidebar-nav-link"}>
+          <NavLink to={"/window"} title={"Moderators"}>
+            <DesktopWindows/>
+            <span>Window page</span>
           </NavLink>
         </div>
         <div className="bottom-section">
